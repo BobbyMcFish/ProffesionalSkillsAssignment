@@ -1,3 +1,4 @@
+//////test
 #include "Enemy.h"
 extern IModel* player;
 CEnemy::CEnemy(char enemyType)
