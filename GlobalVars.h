@@ -10,6 +10,8 @@
 #include <conio.h>
 #include <ctype.h>
 #include "Map.h"
+#include "Runner.h"
+#include "Shooter.h"
 #include "XboxController.h"
 using namespace tle;
 
@@ -65,9 +67,6 @@ int numBullets = 0;
 int maxBullets = 5;
 
 //Enemy Variables
-const int maxEnemyBullets = 3;
-int numOfEnemies = 0;
-int numEnemyBullets = 0;
 
 //Mesh/Model Variables
 ICamera* camera = NULL;
@@ -76,13 +75,11 @@ IMesh* floorMesh = NULL;
 IMesh* sphereMesh = NULL;
 IMesh* bulletMesh = NULL;
 IMesh* skyMesh = NULL;
-IMesh* enemyMesh = NULL;
 
 IModel* player = NULL;
 IModel* bullet = NULL;
 IModel* ground = NULL;
 IModel* sky = NULL;
-IModel* enemy = NULL;
 
 //Text Variables
 int fontY = 20;
@@ -104,7 +101,7 @@ enum EKeyCode upArrowKey = Key_Up;
 enum EKeyCode downArrowKey = Key_Down;
 enum EKeyCode enterKey = Key_Return;
 float gravity = 3.0f;
-float updateTime = 0.0f; // calculating the updatetime every frame
+float updateTime = 1/60.0f; // calculating the updatetime every frame
 float playerY = 5.0f;
 float playerX = 0.0f;
 
@@ -120,10 +117,12 @@ struct BulletData
 };
 
 vector <BulletData*> bullets;
-BulletData enemyBullets[maxEnemyBullets];
+vector <IModel*> runners;
 
 /*Classes*/
 vector <CMap*> map;
+vector <CEnemy*> enemies;
+
 CXBOXController* Player1 = new CXBOXController(1); 
 
 #else

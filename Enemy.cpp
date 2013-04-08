@@ -1,59 +1,41 @@
 #include "Enemy.h"
-
-Enemy::Enemy()
+extern IModel* player;
+CEnemy::CEnemy(char enemyType)
 {
-	maxEnemies = 6;
-	maxEnemyBullets = 3;
+	enemy = NULL;
+	if(enemyType == 'a')
+	{
+		enemy = myEngine->LoadMesh("sopwith-camel.x");
+		enemyModel = enemy->CreateModel();
+	}
 }
-Enemy::~Enemy()
+CEnemy::~CEnemy()
 {
 
 }
 
-int Enemy::MaxEnemiesGet()
+void CEnemy::enemyRemoval(IModel* enemyModel)
+{
+	enemy->RemoveModel(enemyModel);
+}
+
+int CEnemy::MaxEnemiesGet()
 {
 	return maxEnemies;
 }
-void Enemy::RunningCreation(IModel* ground, float updateTime, IModel* player)
+
+IModel* CEnemy::ReturnModel()
+{
+	return enemyModel;
+}
+void CEnemy::RunningCreation(IModel* Ground, float updateTime)
 {
 
 }
-
-
-RunningEnemy::RunningEnemy() : Enemy()
+void CEnemy::Moving(float updateTime)
 {
-	speed = 0.05f;
-	scale = 5.0f;
-	numOfEnemies = 0;
-	runnerMesh = myEngine->LoadMesh("sopwith-camel.x");
+
 }
-
-
-void RunningEnemy::RunningCreation(IModel* ground, float updateTime, IModel* player)
-{
-	int maxNumber = MaxEnemiesGet();
-	const int maxSpawn = 3;
-	IModel* runner[maxSpawn];
-	for(numOfEnemies; numOfEnemies < maxSpawn; numOfEnemies++)
-	{
-		runner[numOfEnemies] = runnerMesh->CreateModel(player->GetX()+400, player->GetY(), player->GetZ()); 
-		runner[numOfEnemies]->Scale(scale);
-		runner[numOfEnemies]->AttachToParent(ground);
-		runner[numOfEnemies]->SetLocalPosition(-1000.0f, 20.0f, 0.0f);
-		runner[numOfEnemies]->RotateLocalY(-90.0f);
-	}
-	for(int i = 0; i < numOfEnemies; i++)
-	{
-		runner[i]->LookAt(player); 
-		runner[i]->MoveX(-speed * updateTime);
-		if(runner[i]->GetX() < -200)
-		{
-			runnerMesh->RemoveModel(runner[i]);
-			numOfEnemies--;
-		}
-	}
-}
-
 
 /*void EnemyBulletMovement()
 {

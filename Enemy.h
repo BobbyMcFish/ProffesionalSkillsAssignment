@@ -1,34 +1,27 @@
 #ifndef _ENEMY
 #define _ENEMY
 #include <TL-Engine.h>
+#include <vector>
 using namespace tle;
 extern I3DEngine* myEngine;
 
 
-class Enemy
+class CEnemy
 {
 private:
+	IMesh* enemy;
+	IModel* enemyModel;
 	int maxEnemies;
-	int maxEnemyBullets;
 public:
-	Enemy();
-	~Enemy();
+	CEnemy(char enemyType);
+	~CEnemy();
+	void enemyRemoval(IModel* enemyModel);
 	int MaxEnemiesGet();
-	virtual void RunningCreation(IModel* ground, float updateTime, IModel* player);
+	IModel* ReturnModel();
+	virtual void Creation(IModel* Ground, float updateTime);
+	virtual void Moving(float updateTime);
 };
 
-class RunningEnemy : public Enemy
-{
-private:
-	float speed;
-	float scale;
-	int maxRunners;
-	int numOfEnemies;
-	IMesh* runnerMesh;
-public:
-	RunningEnemy();
-	void RunningCreation(IModel* ground, float updateTime, IModel* player);
-};
 #else
 
 #endif

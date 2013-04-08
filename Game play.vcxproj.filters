@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Game play.cpp" />
+    <ClCompile Include="Enemy.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Runner.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="XboxController.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Shooter.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Enemy.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="XboxController.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalVars.h">
+      <Filter>Global Variables</Filter>
+    </ClInclude>
+    <ClInclude Include="Runner.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Shooter.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="AI">
+      <UniqueIdentifier>{dd2b57bf-2dbe-4935-a889-7e892ab6baba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{051a0f03-a31c-48ce-9473-85377286edf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control">
+      <UniqueIdentifier>{c3ac0d58-a76a-426f-b425-d0a59a520435}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Global Variables">
+      <UniqueIdentifier>{e29d86b5-0c17-446c-b65d-9c77f09490bf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

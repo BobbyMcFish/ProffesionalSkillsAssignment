@@ -92,39 +92,6 @@ void bulletMovement()
 	}
 }
 
-void EnemyBulletMovement()
-{
-	for(int i = 0; i < maxEnemyBullets; i++)
-	{
-		enemyBullets[i].model->Move( -bulletSpeed * updateTime, 0, 0);
-
-		enemyBullets[i].life -= updateTime;
-
-		if (enemyBullets[i].life <= 0)
-		{
-			// Destroy bullet
-			bulletMesh->RemoveModel( enemyBullets[i].model );
-
-			// Copy last bullet into this dead slot to keep all live bullets in one block
-			enemyBullets[i].model = enemyBullets[numEnemyBullets-1].model;
-			enemyBullets[i].xVel = enemyBullets[numEnemyBullets-1].xVel;
-			enemyBullets[i].yVel = enemyBullets[numEnemyBullets-1].yVel;
-			enemyBullets[i].life = enemyBullets[numEnemyBullets-1].life;
-
-			// Decrease number of bullets
-			numEnemyBullets--;
-		}
-	}
-	if(enemy->GetX() < 300 && numEnemyBullets < maxEnemyBullets)
-	{
-		enemyBullets[numEnemyBullets].model = bulletMesh->CreateModel( enemy->GetX(), enemy->GetY(), enemy->GetZ());
-
-		// Length of bullet's life measured in seconds
-		enemyBullets[numEnemyBullets].life = 1.5f;
-		numEnemyBullets++;
-	}
-	
-}
 void frontEndSetUp()
 {	
 	soundLoader();
@@ -159,22 +126,17 @@ void frontEndRemovel()
 	
 void gameSetUp()
 {
+	enemies.push_back(new DRunningEnemy(ground, player));
 	alSourcePlay( sourceBack );
 	/*Model Setup*/
 	sphereMesh = myEngine->LoadMesh("Sphere.x");
 	player = sphereMesh->CreateModel(0.0f, 5.0f, 100.0f);
 	floorMesh = myEngine->LoadMesh("Block.x");
 	bulletMesh = myEngine->LoadMesh("Bullet.x");
-	enemyMesh = myEngine->LoadMesh("sopwith-camel.x");
 	ground = floorMesh->CreateModel(1500.0f, baseHeight,100.0f);
 	camera = myEngine->CreateCamera(kManual,0.0f,50.0f,-60.0f);
-	enemy = enemyMesh->CreateModel(0.0f,5.0f,100.0f);
-	enemy->Scale(5.0f);
+
 	player->SetSkin("WhiteBall.jpg");
-	enemy->AttachToParent(ground);
-	enemy->SetLocalPosition(-1000.0f, 20.0f, 0.0f);
-	enemy->RotateLocalY(-90.0f);
-	numOfEnemies++;
 	numBullets = 0;
 
 	/*Map Setup*/
@@ -192,10 +154,12 @@ void gameUpdate()
 	outText << "FPS: " << 0.25f / updateTime  ;
 	FPSDisplay ->Draw( outText.str(), fontX, fontY );
 	outText.str("");
+	enemies[0]->Creation(ground, updateTime);
+
+	enemies[0]->Moving(updateTime);
 
 	map[0]->setMinMax();
 	float floorY = ground->GetY();
-
 	//used to check for collision
 	const int SIZE = map.size();
 	bool collision = false;
@@ -260,7 +224,6 @@ void gameRemovel()
 	myEngine->RemoveMesh(floorMesh);
 	myEngine->RemoveMesh(sphereMesh);
 	myEngine->RemoveMesh(bulletMesh);
-	myEngine->RemoveMesh(enemyMesh);
 	myEngine->RemoveCamera(camera);
 }
 
@@ -293,22 +256,6 @@ void main()
 	{
 		// Draw the scene
 		myEngine->DrawScene();
-		if(numOfEnemies == 1)
-		{
-			enemy->LookAt(player);
-			enemy->Scale(5.0f);
-			enemy->MoveX(-100.0f * updateTime);
-			if(enemy->GetX() < -200 && numOfEnemies == 1)
-			{
-				enemyMesh->RemoveModel(enemy);
-				numOfEnemies--;
-				enemy = enemyMesh->CreateModel(0,0,0);
-				enemy->AttachToParent(ground);
-				enemy->SetLocalPosition(0.0f, 20.0f, 0.0f);
-				enemy->RotateLocalY(-90.0f);
-				numOfEnemies++;
-			}
-		}
 		gameUpdate();
 
 		if(myEngine->KeyHit(quitKey)||  (Player1->IsConnected()) && Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_Y)

@@ -52,7 +52,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>C:\Users\user\Downloads\Game play\OpenAL 1.1 SDK\freealut-1.1.0-bin\include;C:\Users\user\Downloads\Game play\OpenAL 1.1 SDK\include;C:\Users\user\Downloads\Game play\TL-Engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\user\Downloads\Game Play\OpenAL 1.1 SDK\freealut-1.1.0-bin\include;C:\Users\user\Downloads\Game play\OpenAL 1.1 SDK\include;C:\Users\user\Downloads\Game play\TL-Engine\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <PrecompiledHeader>
@@ -115,16 +115,22 @@ copy "C:\Users\user\Downloads\Game play\OpenAL 1.1 SDK\freealut-1.1.0-bin\lib\al
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game play.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Runner.cpp" />
+    <ClCompile Include="Shooter.cpp" />
     <ClCompile Include="XboxController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="GlobalVars.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Runner.h" />
+    <ClInclude Include="Shooter.h" />
     <ClInclude Include="XboxController.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
