@@ -11,28 +11,28 @@ Material _Stone_Masonry_Multi_{
 3.2;
 0.000000;0.000000;0.000000;;
 0.000000;0.000000;0.000000;;
-   TextureFilename { "Block.xVegetation_Bark_Ponderosa.jpg";   } 
+   TextureFilename { "Block.xStone_Masonry_Multi.jpg";   } 
 } 
 Material _Stone_Granite_Midnite_{ 
 0.384313725490196;0.372549019607843;0.376470588235294;1.0;;
 3.2;
 0.000000;0.000000;0.000000;;
 0.000000;0.000000;0.000000;;
-   TextureFilename { "Block.xVegetation_Juniper.jpg";   } 
+   TextureFilename { "Block.xStone_Granite_Midnite.jpg";   } 
 } 
 Material _Stone_Masonry_Multi_1{ 
 0.713725490196078;0.686274509803922;0.643137254901961;1.0;;
 3.2;
 0.000000;0.000000;0.000000;;
 0.000000;0.000000;0.000000;;
-   TextureFilename { "Block.xVegetation_Bark_Ponderosa.jpg";   } 
+   TextureFilename { "Block.xStone_Masonry_Multi.jpg";   } 
 } 
 Material _Stone_Granite_Midnite_1{ 
 0.384313725490196;0.372549019607843;0.376470588235294;1.0;;
 3.2;
 0.000000;0.000000;0.000000;;
 0.000000;0.000000;0.000000;;
-   TextureFilename { "Block.xVegetation_Juniper.jpg";   } 
+   TextureFilename { "Block.xStone_Granite_Midnite.jpg";   } 
 } 
 Mesh mesh_0{
  704;

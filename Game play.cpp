@@ -52,19 +52,19 @@ void soundLoader()
 
 void bulletMovement()
 {
-	if ((myEngine->KeyHit( fireKey ) ||  
-		(Player1->IsConnected() && Player1->GetState().Gamepad.bRightTrigger & XINPUT_GAMEPAD_RIGHT_THUMB)) 
-		&& numBullets < maxBullets)
+	if (myEngine->KeyHit( fireKey ) || Player1->IsConnected() && Player1->GetState().Gamepad.bRightTrigger & XINPUT_GAMEPAD_RIGHT_THUMB && numBullets < maxBullets)
 	{
 		alSourcePlay( source );
 		BulletData* tmp = new BulletData;
 		tmp->xVel = 0.0f;
 		tmp->yVel = 0.0f;
-		tmp->model = bulletMesh->CreateModel( 0.0f, 5.0f, 100.0f );
+		tmp->model = bulletMesh->CreateModel( 0.0f, 0.0f, 0.0f );
 		tmp->life = 1.5f;
         bullets.push_back( tmp );
+
 		
-		//bullets[numBullets].model->AttachToParent(ground);
+		bullets[numBullets]->model->AttachToParent(ground[0]);
+		bullets[numBullets]->model->SetLocalPosition(playerX - ground[0]->GetX(),  (-ground[0]->GetY()) - 20.0f  + playerY , 100.0f );
 		numBullets++;
 	}
 	for (int i = 0; i < numBullets; i++)
@@ -78,13 +78,8 @@ void bulletMovement()
 		if (bullets[i]->life <= 0)
 		{
 			// Destroy bullet
-			bulletMesh->RemoveModel( bullets[i]->model );
-
-			// Copy last bullet into this dead slot to keep all live bullets in one block
-			bullets[i]->model = bullets[numBullets-1]->model;
-			bullets[i]->xVel = bullets[numBullets-1]->xVel;
-			bullets[i]->yVel = bullets[numBullets-1]->yVel;
-			bullets[i]->life = bullets[numBullets-1]->life;
+  			bulletMesh->RemoveModel(bullets[i]->model);
+			bullets.pop_front();
 
 			// Decrease number of bullets
 			numBullets--;
@@ -126,22 +121,37 @@ void frontEndRemovel()
 	
 void gameSetUp()
 {
-	enemies.push_back(new DRunningEnemy(ground, player));
 	alSourcePlay( sourceBack );
 	/*Model Setup*/
 	sphereMesh = myEngine->LoadMesh("Sphere.x");
 	player = sphereMesh->CreateModel(0.0f, 5.0f, 100.0f);
 	floorMesh = myEngine->LoadMesh("Block.x");
 	bulletMesh = myEngine->LoadMesh("Bullet.x");
-	ground = floorMesh->CreateModel(1500.0f, baseHeight,100.0f);
-	camera = myEngine->CreateCamera(kManual,0.0f,50.0f,-60.0f);
-
+	enemyMesh = myEngine->LoadMesh("sopwith-camel.x");
+	ground[0] = floorMesh->CreateModel(1500.0f, baseHeight, 100.0f);
+	float x = 1000.0f;
+	for(int i = 1;  i <= 5; i++)
+	{
+		ground[i] = floorMesh->CreateModel(x, 0.0f, 0.0f);
+		ground[i]->AttachToParent(ground[0]);
+		x += 1000.0f;
+	}
+	ground[6] = floorMesh->CreateModel(-1545.0f, -117.0f, 0.0f);
+	ground[6]->AttachToParent(ground[0]);
+	ground[6]->RotateZ(-90);
+	camera = myEngine->CreateCamera(kFPS,0.0f,50.0f,-60.0f);
+	enemy = enemyMesh->CreateModel(0.0f,5.0f,100.0f);
+	enemy->Scale(5.0f);
 	player->SetSkin("WhiteBall.jpg");
+	enemy->AttachToParent(ground[0]);
+	enemy->SetLocalPosition(-1000.0f, 20.0f, 0.0f);
+	enemy->RotateLocalY(-90.0f);
+	numOfEnemies++;
 	numBullets = 0;
 
 	/*Map Setup*/
 	CMap* temp = new CMap();
-	temp->MapLoading(ground);
+	temp->MapLoading(ground[0]);
 
 	/*UI Setup*/
 	FPSDisplay = myEngine->LoadFont( "Comic Sans MS", 36 );
@@ -154,12 +164,10 @@ void gameUpdate()
 	outText << "FPS: " << 0.25f / updateTime  ;
 	FPSDisplay ->Draw( outText.str(), fontX, fontY );
 	outText.str("");
-	enemies[0]->Creation(ground, updateTime);
-
-	enemies[0]->Moving(updateTime);
 
 	map[0]->setMinMax();
-	float floorY = ground->GetY();
+	float floorY = ground[0]->GetY();
+
 	//used to check for collision
 	const int SIZE = map.size();
 	bool collision = false;
@@ -174,23 +182,23 @@ void gameUpdate()
 	}
 
 	//Movement Controls
-	if(myEngine->KeyHeld(leftKey) ||  (Player1->IsConnected()) 
-		&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)
+	if((myEngine->KeyHeld(leftKey) ||  (Player1->IsConnected()) 
+		&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) && ground[0]->GetX() < 1525)
 	{
-		ground->MoveX(speed * updateTime);
+		ground[0]->MoveX(speed * updateTime);
 	}
-	if(myEngine->KeyHeld(rightKey) ||  (Player1->IsConnected())
-		&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)
+	if((myEngine->KeyHeld(rightKey) ||  (Player1->IsConnected())
+		&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)) //&& ground[0]->GetX() < 1510)
 	{
-		ground->MoveX(-speed * updateTime);
+		ground[0]->MoveX(-speed * updateTime);
 	}
 
 	//Code to make the player look like they are jumping but the platforms moves down
-	if(myEngine->KeyHeld(jumpKey) || (Player1->IsConnected()) 
-		&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_A)
+	if((myEngine->KeyHeld(jumpKey) || (Player1->IsConnected()) 
+		&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_A ))
 	{
 		//code to apply gravity and move the ground and platforms attached to it
-		ground->MoveY(-speed * gravity * updateTime);
+		ground[0]->MoveY(-speed * gravity * updateTime);
 		gravity -= 0.0095f;
 		if(floorY > baseHeight || collision)
 		{
@@ -203,7 +211,7 @@ void gameUpdate()
 		if(floorY < baseHeight && !collision)
 		{
 			gravity = -2.5f;
-			ground->MoveY(-speed * gravity * updateTime);
+			ground[0]->MoveY(-speed * gravity * updateTime);
 		}
 	//sets gravity to start value if thier is a collision or on ground floor
 		if(floorY > baseHeight || collision)
@@ -213,17 +221,20 @@ void gameUpdate()
 	}
 
 	bulletMovement();
-//	EnemyBulletMovement();
 }
 
 void gameRemovel()
 {
 	alutExit();
 	sphereMesh->RemoveModel(player);
-	floorMesh->RemoveModel(ground);
+	for(int i = 0; i < 3; i++)
+	{
+		floorMesh->RemoveModel(ground[i]);
+	}
 	myEngine->RemoveMesh(floorMesh);
 	myEngine->RemoveMesh(sphereMesh);
 	myEngine->RemoveMesh(bulletMesh);
+	myEngine->RemoveMesh(enemyMesh);
 	myEngine->RemoveCamera(camera);
 }
 
@@ -256,6 +267,7 @@ void main()
 	{
 		// Draw the scene
 		myEngine->DrawScene();
+		
 		gameUpdate();
 
 		if(myEngine->KeyHit(quitKey)||  (Player1->IsConnected()) && Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_Y)

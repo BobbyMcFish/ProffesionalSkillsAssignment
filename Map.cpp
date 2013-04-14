@@ -11,44 +11,43 @@ CMap::CMap()
 	platformMesh = myEngine->LoadMesh("Platform.x");;
 }
 
-CMap::~CMap()
-{
-
-}
-
 void CMap::MapLoading(IModel* ground)
 {
 	ifstream inp;
-	inp.open("test.txt");
+	inp.open("Level1.txt");
 	int index = 0;
 	CMap temp;
+	vector <CMap*> tmp;
+
 	while(!inp.eof())
 	{
 		inp >> temp.mapChar; 
-		map.push_back(new CMap());
-		map[index]->mapChar = temp.mapChar;
+		tmp.push_back(new CMap());
+		tmp[index]->mapChar = temp.mapChar;
 		index++;
 	}
 	inp.close();
 
 	float y = 120.0f;
-	float x = -1500.0f;
+	float x = 1500.0f;
 	float z = -20.0f;
-	int SIZE = map.size();
+	int in = 0;
+	int SIZE = tmp.size();
 	for(int i = 0; i < SIZE; i++)
 	{
-		if(map[i]->mapChar != '0')
-		{
-			map[i]->platform = platformMesh->CreateModel(x, y, z);
-			map[i]->platform->AttachToParent(ground);
-		}
-		x += 150.0f;
-
-		if( i % 10 == 0 && i != 0)
+		if(tmp[i]->mapChar == ';')
 		{
 			y -= 40.0f;
 			x = -1500.0f;
 		}
+		else if(tmp[i]->mapChar == '1')
+		{
+			map.push_back(new CMap());
+			map[in]->platform = platformMesh->CreateModel(x, y, z);
+			map[in]->platform->AttachToParent(ground);
+			in++;
+		}
+		x += 100.0f;
 	}
 }
 
@@ -59,19 +58,17 @@ void CMap::setMinMax()
 	float platformY;
 	for (int i = 0; i < SIZE; i++)
 	{
-		if(map[i]->mapChar != '0')
-		{
-			platformX = map[i]->platform->GetX();
-			platformY = map[i]->platform->GetY();
-			//yMin equals bottom of the platforms
-			map[i]->yMin = platformY - 5.0f;
-			//yMax equals the top of the platforms
-			map[i]->yMax = platformY + 5.0f;
-			//xMin equals the left of the platforms
-			map[i]->xMin = platformX -95.0f  ;
-			//xMax equals the right of the platforms
-			map[i]->xMax = platformX + -5.0f;
-		}
+		platformX = map[i]->platform->GetX();
+		platformY = map[i]->platform->GetY();
+		//yMin equals bottom of the platforms
+		map[i]->yMin = platformY - 5.0f;
+		//yMax equals the top of the platforms
+		map[i]->yMax = platformY + 5.0f;
+		//xMin equals the left of the platforms
+		map[i]->xMin = platformX -95.0f  ;
+		//xMax equals the right of the platforms
+		map[i]->xMax = platformX + -5.0f;
+		
 	}
 }
 
@@ -92,22 +89,19 @@ bool CMap::collisionDetection(IModel* player, int in)
 
 	//returns true or false depending on whether their has been a collsion or not
 	float radius = 13.0f;
-	float playerY = 5.0f - radius;
+	float playerY = 10.0f - radius;
 	float playerX = 0.0f;
 
-	if(map[in]->mapChar != '0')
+	if(playerX > map[in]->xMin - radius && playerX < map[in]->xMax  + radius && playerY > map[in]->yMin && playerY < map[in]->yMax)
 	{
-		if(playerX > map[in]->xMin - radius && playerX < map[in]->xMax  + radius && playerY > map[in]->yMin && playerY < map[in]->yMax)
+		if(map[in]->yMax - playerY  < playerY - map[in]->yMin)
 		{
-			if(map[in]->yMax - playerY  < playerY - map[in]->yMin)
-			{
-				return true;
-			}
+			return true;
 		}
-		else
-		{
-			return false;
-		}
+	}
+	else
+	{
+		return false;
 	}
 	return false;
 }

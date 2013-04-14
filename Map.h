@@ -15,7 +15,6 @@ private:
 	IMesh* platformMesh;
 public:
 	CMap();
-	~CMap();
 	void MapLoading(IModel* ground);
 	void setMinMax();
 	bool collisionDetection(IModel* player, int in);
