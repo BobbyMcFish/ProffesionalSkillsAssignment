@@ -122,6 +122,7 @@ void frontEndRemovel()
 void gameSetUp()
 {
 	alSourcePlay( sourceBack );
+	enemies.push_back(new DRunningEnemy(ground[0], player));
 	/*Model Setup*/
 	sphereMesh = myEngine->LoadMesh("Sphere.x");
 	player = sphereMesh->CreateModel(0.0f, 5.0f, 100.0f);
@@ -157,9 +158,13 @@ void gameUpdate()
 	outText << "FPS: " << 0.25f / updateTime  ;
 	FPSDisplay ->Draw( outText.str(), fontX, fontY );
 	outText.str("");
-
 	map[0]->setMinMax();
 	float floorY = ground[0]->GetY();
+
+
+	enemies[0]->Creation(ground[0], updateTime);
+
+	enemies[0]->Moving(updateTime);
 
 	//used to check for collision
 	const int SIZE = map.size();

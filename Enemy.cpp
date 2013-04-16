@@ -34,7 +34,7 @@ IModel* CEnemy::ReturnModel()
 {
 	return enemyModel;
 }
-void CEnemy::RunningCreation(IModel* Ground, float updateTime)
+void CEnemy::Creation(IModel* Ground, float updateTime)
 {
 
 }

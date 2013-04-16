@@ -12,6 +12,7 @@
 #include <ctype.h>
 #include "Map.h"
 #include "XboxController.h"
+#include "Runner.h"
 using namespace tle;
 
 #include <al.h>      // Main OpenAL functions
@@ -120,6 +121,7 @@ deque <BulletData*> bullets;
 
 /*Classes*/
 vector <CMap*> map;
+vector <CEnemy*> enemies;
 CXBOXController* Player1 = new CXBOXController(1); 
 
 #else

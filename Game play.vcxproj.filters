@@ -2,26 +2,23 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Game play.cpp" />
-    <ClCompile Include="Enemy.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
-    <ClCompile Include="Runner.cpp">
-      <Filter>AI</Filter>
-    </ClCompile>
     <ClCompile Include="Map.cpp">
       <Filter>Map</Filter>
     </ClCompile>
     <ClCompile Include="XboxController.cpp">
       <Filter>Control</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Runner.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
     <ClCompile Include="Shooter.cpp">
       <Filter>AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Enemy.h">
-      <Filter>AI</Filter>
-    </ClInclude>
     <ClInclude Include="Map.h">
       <Filter>Map</Filter>
     </ClInclude>
@@ -30,6 +27,9 @@
     </ClInclude>
     <ClInclude Include="GlobalVars.h">
       <Filter>Global Variables</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>AI</Filter>
     </ClInclude>
     <ClInclude Include="Runner.h">
       <Filter>AI</Filter>

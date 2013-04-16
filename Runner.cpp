@@ -81,14 +81,14 @@ bool DRunningEnemy::PlayerCollisionDetection(int i)
 	return false;
 }
 
-bool DRunningEnemy::BulletCollisionDetection(int i)
+/*bool DRunningEnemy::BulletCollisionDetection(int i)
 {
 	float bulletX[5];
 	for(int i = 0; i < numBullets; i++)
 	{
-		bulletX[i] = bullets.at(i)->Model->getX();
+//		bulletX[i] = bullets.at(i)->Model->getX();
 	}
-}
+}*/
 
 bool DRunningEnemy::ReturnPlayerCollision()
 {
