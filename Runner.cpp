@@ -89,3 +89,8 @@ bool DRunningEnemy::BulletCollisionDetection(int i)
 		bulletX[i] = bullets.at(i)->Model->getX();
 	}
 }
+
+bool DRunningEnemy::ReturnPlayerCollision()
+{
+	return playerCollision;
+};

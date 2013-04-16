@@ -1,3 +1,4 @@
+//////test
 #include "Enemy.h"
 extern IModel* player;
 CEnemy::CEnemy(char enemyType)
@@ -6,6 +7,11 @@ CEnemy::CEnemy(char enemyType)
 	if(enemyType == 'a')
 	{
 		enemy = myEngine->LoadMesh("sopwith-camel.x");
+		enemyModel = enemy->CreateModel();
+	}
+	if(enemyType == 'b')
+	{
+		enemy = myEngine->LoadMesh("HawkStarfighter.x");
 		enemyModel = enemy->CreateModel();
 	}
 }

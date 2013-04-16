@@ -22,4 +22,5 @@ public:
 	void minMax(IModel* runEnemy, int i);
 	bool PlayerCollisionDetection(int i);
 	bool BulletCollisionDetection(int i);
+	bool ReturnPlayerCollision();
 };

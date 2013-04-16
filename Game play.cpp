@@ -127,7 +127,6 @@ void gameSetUp()
 	player = sphereMesh->CreateModel(0.0f, 5.0f, 100.0f);
 	floorMesh = myEngine->LoadMesh("Block.x");
 	bulletMesh = myEngine->LoadMesh("Bullet.x");
-	enemyMesh = myEngine->LoadMesh("sopwith-camel.x");
 	ground[0] = floorMesh->CreateModel(1500.0f, baseHeight, 100.0f);
 	float x = 1000.0f;
 	for(int i = 1;  i <= 5; i++)
@@ -140,13 +139,7 @@ void gameSetUp()
 	ground[6]->AttachToParent(ground[0]);
 	ground[6]->RotateZ(-90);
 	camera = myEngine->CreateCamera(kFPS,0.0f,50.0f,-60.0f);
-	enemy = enemyMesh->CreateModel(0.0f,5.0f,100.0f);
-	enemy->Scale(5.0f);
 	player->SetSkin("WhiteBall.jpg");
-	enemy->AttachToParent(ground[0]);
-	enemy->SetLocalPosition(-1000.0f, 20.0f, 0.0f);
-	enemy->RotateLocalY(-90.0f);
-	numOfEnemies++;
 	numBullets = 0;
 
 	/*Map Setup*/
@@ -234,7 +227,6 @@ void gameRemovel()
 	myEngine->RemoveMesh(floorMesh);
 	myEngine->RemoveMesh(sphereMesh);
 	myEngine->RemoveMesh(bulletMesh);
-	myEngine->RemoveMesh(enemyMesh);
 	myEngine->RemoveCamera(camera);
 }
 

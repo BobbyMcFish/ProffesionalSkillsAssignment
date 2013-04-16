@@ -65,10 +65,6 @@ const float bulletSpeed = 100.0f; // Movement speed of a bullet
 int numBullets = 0;
 int maxBullets = 5;
 
-//Enemy Variables
-const int maxEnemyBullets = 3;
-int numOfEnemies = 0;
-int numEnemyBullets = 0;
 
 //Mesh/Model Variables
 ICamera* camera = NULL;
@@ -121,7 +117,6 @@ struct BulletData
 };
 
 deque <BulletData*> bullets;
-BulletData enemyBullets[maxEnemyBullets];
 
 /*Classes*/
 vector <CMap*> map;
