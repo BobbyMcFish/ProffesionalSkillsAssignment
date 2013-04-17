@@ -1,5 +1,5 @@
 #include "Enemy.h"
-
+#include "Player.h"
 
 class DRunningEnemy : public CEnemy
 {
@@ -15,8 +15,10 @@ private:
 	float minY[3];
 	float maxY[3];
 	bool playerCollision;
+	CEnemy enemy;
+
 public:
-	DRunningEnemy(IModel* ground, IModel* player);
+	DRunningEnemy(IModel* ground);
 	void Creation(IModel* Ground, float updateTime);
 	void Moving(float updateTime);
 	void minMax(IModel* runEnemy, int i);

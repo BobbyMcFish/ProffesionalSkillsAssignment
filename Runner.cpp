@@ -1,14 +1,21 @@
 #include "Runner.h"
-extern IModel* player;
-extern struct BulletData;
-extern vector <BulletData*> bullets;
+extern Player player;
+extern struct BulletData
+{
+	IModel* model;
+	float xVel, yVel;
+	float life;
+};
+extern deque <BulletData*> bullets;
 extern int numBullets;
+extern const float playerX;
+extern const float playerY;
+static IModel* playerModel;
 
-
-DRunningEnemy::DRunningEnemy(IModel* ground, IModel* player) : CEnemy('a')
+DRunningEnemy::DRunningEnemy(IModel* ground) : CEnemy('a')
 {
 	scale = 5.0f;
-	runner = ReturnModel();
+	runner = enemy.ReturnModel();
 	speed[0] = 5.0f;
 	speed[1] = 50.0f;
 	speed[2] = 100.0f;
@@ -19,6 +26,7 @@ DRunningEnemy::DRunningEnemy(IModel* ground, IModel* player) : CEnemy('a')
 
 void DRunningEnemy::Creation(IModel* ground, float updateTime)
 {
+	player.GetModel(playerModel);
 	int maxNumber = 3;
 	const int maxSpawn = 3;
 	float x = 0.0f;
@@ -27,10 +35,10 @@ void DRunningEnemy::Creation(IModel* ground, float updateTime)
 		runner->AttachToParent(ground);
 		runner->SetLocalPosition((-1000.0f + x), 20.0f, 0.0f);
 		runner->RotateLocalY(-90.0f);
-		runner->LookAt(player);
+		runner->LookAt(playerModel);
 		runner->Scale(scale);
 		runners.push_back(runner);
-		runner = ReturnModel();
+		runner = enemy.ReturnModel();
 		x += 10.0f;
 	}
 }
@@ -42,13 +50,13 @@ void DRunningEnemy::Moving(float updateTime)
 		runners.at(i)->MoveX(-speed[i] * updateTime);
 		minMax(runners[i], i);
 		playerCollision = PlayerCollisionDetection(i);
-		if(runners.at(i)->GetX() < player->GetX()-200)
+		if(runners.at(i)->GetX() < playerX-200)
 		{
-			runners.at(i)->SetX(player->GetX()+400);
+			runners.at(i)->SetX(playerX+400);
 		}
 		else if(playerCollision == true)
 		{
-			runners.at(i)->SetX(player->GetX()+400);
+			runners.at(i)->SetX(playerX+400);
 		}
 	}
 }
@@ -64,9 +72,6 @@ void DRunningEnemy::minMax(IModel* RunEnemy, int i)
 bool DRunningEnemy::PlayerCollisionDetection(int i)
 {
 	float radius = 13.0f;
-	float playerY = player->GetY();
-	float playerX = player->GetX();
-
 	if(playerX > minX[i] && playerX < maxX[i] && playerY > minY[i] && playerY < maxY[i])
 	{
 		if(maxY[i] - playerY  > playerY)

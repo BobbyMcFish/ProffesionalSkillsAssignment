@@ -10,6 +10,7 @@
 #include <stdlib.h> // General console window includes
 #include <conio.h>
 #include <ctype.h>
+#include "Player.h"
 #include "Map.h"
 #include "XboxController.h"
 #include "Runner.h"
@@ -21,13 +22,10 @@ using namespace tle;
 
 /*Sound Variables*/
 
-// A buffer holds sound data, but the creation of a buffer on its own doesn't play a sound. It is the
-// equivalent of a mesh in the TL-Engine
 ALuint buffer;
 ALuint bufferBack;
 ALuint bufferMenu;
-// A source is an actual sound in the world. A sound must be associated with a buffer to indicate
-// which sound data to play. Sources are equivalent to models in the TL-Engine
+
 ALuint source;
 ALuint sourceBack;
 ALuint Menu;
@@ -57,14 +55,13 @@ ALfloat listenerOri[6] = { 0.0, 0.0, -1.0,
 const float baseHeight = -15.0f;// Height the main floor is at
 const float speed = 50.0f; // speed of player and jumping
 
-
 //Engine
 I3DEngine* myEngine = New3DEngine( kTLX );
 
 //Bullet variables
 const float bulletSpeed = 100.0f; // Movement speed of a bullet
 int numBullets = 0;
-int maxBullets = 5;
+const int maxBullets = 5;
 
 
 //Mesh/Model Variables
@@ -76,7 +73,6 @@ IMesh* bulletMesh = NULL;
 IMesh* skyMesh = NULL;
 IMesh* enemyMesh = NULL;
 
-IModel* player = NULL;
 IModel* bullet = NULL;
 IModel* ground[7];
 IModel* sky = NULL;
@@ -103,8 +99,8 @@ enum EKeyCode downArrowKey = Key_Down;
 enum EKeyCode enterKey = Key_Return;
 float gravity = 3.0f;
 float updateTime = 0.0f; // calculating the updatetime every frame
-float playerY = 5.0f;
-float playerX = 0.0f;
+const float playerY = 5.0f;
+const float playerX = 0.0f;
 
 
 /************Structures/Classes****************/
@@ -117,9 +113,9 @@ struct BulletData
 	float life;
 };
 
-deque <BulletData*> bullets;
-
 /*Classes*/
+Player* player = NULL;
+deque <BulletData*> bullets;
 vector <CMap*> map;
 vector <CEnemy*> enemies;
 CXBOXController* Player1 = new CXBOXController(1); 

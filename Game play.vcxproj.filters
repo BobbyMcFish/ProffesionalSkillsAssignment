@@ -17,6 +17,8 @@
     <ClCompile Include="Shooter.cpp">
       <Filter>AI</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Main Controls.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">
@@ -37,6 +39,8 @@
     <ClInclude Include="Shooter.h">
       <Filter>AI</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Main Controls.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />

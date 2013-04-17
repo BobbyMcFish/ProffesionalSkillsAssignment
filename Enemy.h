@@ -2,10 +2,9 @@
 #define _ENEMY
 #include <TL-Engine.h>
 #include <vector>
+#include <deque>
 using namespace tle;
 extern I3DEngine* myEngine;
-
-
 class CEnemy
 {
 private:
