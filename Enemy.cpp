@@ -1,6 +1,7 @@
-//////test
 #include "Enemy.h"
 extern IModel* player;
+
+
 CEnemy::CEnemy(char enemyType)
 {
 	enemy = NULL;
@@ -14,10 +15,6 @@ CEnemy::CEnemy(char enemyType)
 		enemy = myEngine->LoadMesh("HawkStarfighter.x");
 		enemyModel = enemy->CreateModel();
 	}
-}
-CEnemy::~CEnemy()
-{
-
 }
 
 void CEnemy::enemyRemoval(IModel* enemyModel)
@@ -41,7 +38,7 @@ void CEnemy::Creation(IModel* Ground, float updateTime)
 void CEnemy::Moving(float updateTime)
 {
 
-}
+};
 
 /*void EnemyBulletMovement()
 {

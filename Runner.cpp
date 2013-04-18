@@ -1,32 +1,36 @@
 #include "Runner.h"
-extern Player player;
-extern struct BulletData
-{
-	IModel* model;
-	float xVel, yVel;
-	float life;
-};
-extern deque <BulletData*> bullets;
-extern int numBullets;
-extern const float playerX;
-extern const float playerY;
-static IModel* playerModel;
+//extern Player player;
+//extern struct BulletData
+//{
+	//IModel* model;
+	//float xVel, yVel;
+	//float life;
+//};
+
+//extern deque <BulletData*> bullets;
+//extern int numBullets;
+//extern const float playerX;
+//extern const float playerY;
+
 
 DRunningEnemy::DRunningEnemy(IModel* ground) : CEnemy('a')
 {
 	scale = 5.0f;
-	runner = enemy.ReturnModel();
+	runner = ReturnModel();
 	speed[0] = 5.0f;
 	speed[1] = 50.0f;
 	speed[2] = 100.0f;
 	numOfEnemies = 0;
 	spawnDistance = 10;
+
+	//player.GetModel(playerModel);
+	playerX = 0;
+	playerY = 5;
 }
 
 
 void DRunningEnemy::Creation(IModel* ground, float updateTime)
 {
-	player.GetModel(playerModel);
 	int maxNumber = 3;
 	const int maxSpawn = 3;
 	float x = 0.0f;
@@ -38,13 +42,15 @@ void DRunningEnemy::Creation(IModel* ground, float updateTime)
 		runner->LookAt(playerModel);
 		runner->Scale(scale);
 		runners.push_back(runner);
-		runner = enemy.ReturnModel();
+		runner = ReturnModel();
 		x += 10.0f;
 	}
 }
 
 void DRunningEnemy::Moving(float updateTime)
 {
+	playerX = playerModel->GetX();
+	playerY = playerModel->GetY();
 	for(int i = 0; i < numOfEnemies; i++)
 	{
 		runners.at(i)->MoveX(-speed[i] * updateTime);
