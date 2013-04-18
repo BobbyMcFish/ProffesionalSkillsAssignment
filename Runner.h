@@ -20,7 +20,7 @@ private:
 	bool playerCollision;
 
 public:
-	DRunningEnemy(IModel* ground);
+	DRunningEnemy(IModel* ground, IModel* player);
 	void Creation(IModel* Ground, float updateTime);
 	void Moving(float updateTime);
 	void minMax(IModel* runEnemy, int i);

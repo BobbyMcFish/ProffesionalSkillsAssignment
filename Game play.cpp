@@ -37,7 +37,8 @@ void frontEndRemovel()
 void gameSetUp()
 {
 	alSourcePlay( sourceBack );
-	enemies.push_back(new DRunningEnemy(ground[0]));
+	player = new Player();
+	enemies.push_back(new DRunningEnemy(ground[0], player->GetModel()));
 	/*Model Setup*/
 	sphereMesh = myEngine->LoadMesh("Sphere.x");
 	floorMesh = myEngine->LoadMesh("Block.x");
@@ -82,8 +83,7 @@ void gameUpdate()
 	//used to check for collision
 	const int SIZE = map.size();
 	bool collision = false;
-	IModel* playerModel;
-	player->GetModel(playerModel);
+	IModel* playerModel = player->GetModel();
 	for(int i = 0; i < SIZE; i++)
 	{
 		collision = map[i]->collisionDetection(playerModel, i);
@@ -132,7 +132,7 @@ void gameUpdate()
 		}
 	}
 
-	bulletMovement();
+	bulletMovement(bulletSpeed, maxBullets, playerY, playerX);
 }
 
 void gameRemovel()

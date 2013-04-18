@@ -25,9 +25,9 @@ void Player::GetLives( int &playerLife) const
 	playerLife = lives;
 }
 
-void Player::GetModel( IModel* playerModel) const
+IModel* Player::GetModel() const
 {
-	playerModel = model;
+	return model;
 }
 
 void Player::SetHealth( int damage)

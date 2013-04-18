@@ -5,8 +5,9 @@
 #include <deque>
 #include "XboxController.h"
 using namespace tle;
-
-extern enum EKeyCode fireKey = Key_Space;
+#ifndef _EXTERNS
+#define _EXTERNS
+extern enum EKeyCode fireKey;
 extern float updateTime;
 extern I3DEngine* myEngine;
 extern CXBOXController* Player1;
@@ -17,19 +18,15 @@ extern struct BulletData
 	float life;
 };
 extern deque <BulletData*> bullets;
-extern const float playerY;
-extern const float playerX;
 extern int numBullets;
-extern const int maxBullets;
 extern IModel* ground[7];
 extern IMesh* bulletMesh;
-extern float bulletSpeed;
 
 // A buffer holds sound data, but the creation of a buffer on its own doesn't play a sound. It is the
 // equivalent of a mesh in the TL-Engine
-ALuint buffer;
-ALuint bufferBack;
-ALuint bufferMenu;
+extern ALuint buffer;
+extern ALuint bufferBack;
+extern ALuint bufferMenu;
 // A source is an actual sound in the world. A sound must be associated with a buffer to indicate
 // which sound data to play. Sources are equivalent to models in the TL-Engine
 extern ALuint source;
@@ -55,7 +52,7 @@ extern ALfloat listenerVel[3];
 // NOTE: OpenAL (like OpenGL) uses a right-handed system for 3D coordinates. To convert from the
 // left-handed system  we have used, we must negate all Z values (facing direction has -ve Z below)
 extern ALfloat listenerOri[6];
-
+#endif
 
 void soundLoader()
 {
@@ -106,7 +103,7 @@ void soundLoader()
 	alListenerf ( AL_GAIN,        1.0f );  // "Master" gain / volume. Controls overall loudness of all sounds
 }
 
-void bulletMovement()
+void bulletMovement(float bulletSpeed, int maxBullets, float playerY, float playerX)
 {
 	if (myEngine->KeyHit( fireKey ) || Player1->IsConnected() && Player1->GetState().Gamepad.bRightTrigger & XINPUT_GAMEPAD_RIGHT_THUMB && numBullets < maxBullets)
 	{

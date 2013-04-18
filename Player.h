@@ -16,7 +16,7 @@ public:
 	~Player();
 	void SetHealth( int damage);
 	void SetLives(int life);
-	void GetModel( IModel* playerModel) const;
+	IModel* GetModel() const;
 	void GetHealth( int &playerHealth) const;
 	void GetLives(int & playerLife) const;
 	void MoveModel();

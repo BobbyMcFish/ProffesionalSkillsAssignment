@@ -13,8 +13,9 @@
 //extern const float playerY;
 
 
-DRunningEnemy::DRunningEnemy(IModel* ground) : CEnemy('a')
+DRunningEnemy::DRunningEnemy(IModel* ground, IModel* player) : CEnemy('a')
 {
+	playerModel = player;
 	scale = 5.0f;
 	runner = ReturnModel();
 	speed[0] = 5.0f;
@@ -22,8 +23,6 @@ DRunningEnemy::DRunningEnemy(IModel* ground) : CEnemy('a')
 	speed[2] = 100.0f;
 	numOfEnemies = 0;
 	spawnDistance = 10;
-
-	//player.GetModel(playerModel);
 	playerX = 0;
 	playerY = 5;
 }
