@@ -18,6 +18,7 @@ private:
 	float minY[3];
 	float maxY[3];
 	bool playerCollision;
+	bool bulletCollision;
 
 public:
 	DRunningEnemy(IModel* ground, IModel* player);

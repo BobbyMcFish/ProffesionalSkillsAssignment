@@ -1,14 +1,14 @@
 #include "Runner.h"
 //extern Player player;
-//extern struct BulletData
-//{
-	//IModel* model;
-	//float xVel, yVel;
-	//float life;
-//};
+extern struct BulletData
+{
+	IModel* model;
+	float xVel, yVel;
+	float life;
+};
 
-//extern deque <BulletData*> bullets;
-//extern int numBullets;
+extern deque <BulletData*> bullets;
+extern int numBullets;
 //extern const float playerX;
 //extern const float playerY;
 
@@ -55,11 +55,12 @@ void DRunningEnemy::Moving(float updateTime)
 		runners.at(i)->MoveX(-speed[i] * updateTime);
 		minMax(runners[i], i);
 		playerCollision = PlayerCollisionDetection(i);
+		bulletCollision = BulletCollisionDetection(i);
 		if(runners.at(i)->GetX() < playerX-200)
 		{
 			runners.at(i)->SetX(playerX+400);
 		}
-		else if(playerCollision == true)
+		else if(playerCollision == true || bulletCollision == true )
 		{
 			runners.at(i)->SetX(playerX+400);
 		}
@@ -91,14 +92,19 @@ bool DRunningEnemy::PlayerCollisionDetection(int i)
 	return false;
 }
 
-/*bool DRunningEnemy::BulletCollisionDetection(int i)
+bool DRunningEnemy::BulletCollisionDetection(int i)
 {
 	float bulletX[5];
-	for(int i = 0; i < numBullets; i++)
+	for(int j = 0; j < numBullets; j++)
 	{
-//		bulletX[i] = bullets.at(i)->Model->getX();
+		bulletX[j] = bullets.at(j)->model->GetX();
+		if(bulletX[j] > (minX[i]) && bulletX[j] < (maxX[i]))
+		{
+			return true;
+		}
 	}
-}*/
+	return false;
+}
 
 bool DRunningEnemy::ReturnPlayerCollision()
 {
