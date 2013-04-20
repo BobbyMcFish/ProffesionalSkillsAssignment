@@ -98,11 +98,13 @@ void gameUpdate()
 		&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) && ground[0]->GetX() < 1525)
 	{
 		ground[0]->MoveX(speed * updateTime);
+		player->leftLeg();
 	}
 	if((myEngine->KeyHeld(rightKey) ||  (Player1->IsConnected())
 		&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)) //&& ground[0]->GetX() < 1510)
 	{
 		ground[0]->MoveX(-speed * updateTime);
+		player->rightLeg();
 	}
 
 	//Code to make the player look like they are jumping but the platforms moves down
@@ -114,7 +116,7 @@ void gameUpdate()
 		gravity -= 0.0095f;
 		if(floorY > baseHeight || collision)
 		{
-			gravity = 3.0f;
+			gravity = 2.5f;
 		}
 	}
 	else
@@ -128,7 +130,7 @@ void gameUpdate()
 	//sets gravity to start value if thier is a collision or on ground floor
 		if(floorY > baseHeight || collision)
 		{
-			gravity = 3.0f;
+			gravity = 2.5f;
 		}
 	}
 

@@ -100,7 +100,7 @@ void soundLoader()
 	alListenerfv( AL_POSITION,    listenerPos ); // Position, velocity and orientation of listener affect sound...
 	alListenerfv( AL_VELOCITY,    listenerVel ); // ...reproduction as noted above
 	alListenerfv( AL_ORIENTATION, listenerOri ); 
-	alListenerf ( AL_GAIN,        1.0f );  // "Master" gain / volume. Controls overall loudness of all sounds
+	alListenerf ( AL_GAIN,        0.0f );  // "Master" gain / volume. Controls overall loudness of all sounds
 }
 
 void bulletMovement(float bulletSpeed, int maxBullets, float playerY, float playerX)
