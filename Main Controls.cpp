@@ -106,9 +106,11 @@ void soundLoader(float volume)
 
 void bulletMovement(float bulletSpeed, int maxBullets, float playerY, float playerX, bool hit)
 {
+	// code thats checks for approppriate key press
 	if (myEngine->KeyHit( fireKey ) || Player1->IsConnected() && Player1->GetState().Gamepad.bRightTrigger & XINPUT_GAMEPAD_RIGHT_THUMB && numBullets < maxBullets)
 	{
 		alSourcePlay( source );
+		//create temporary bullet and pushes it to the back of the bullets vector
 		BulletData* tmp = new BulletData;
 		tmp->xVel = 0.0f;
 		tmp->yVel = 0.0f;
@@ -116,8 +118,7 @@ void bulletMovement(float bulletSpeed, int maxBullets, float playerY, float play
 		tmp->life = 2.0f;
 		tmp->model->Scale(1.0f);
         bullets.push_back( tmp );
-
-		
+		// attaches bullets to ground and sets them to a position to look like they are coming from the player
 		bullets[numBullets]->model->AttachToParent(ground[0]);
 		bullets[numBullets]->model->SetLocalPosition(playerX - ground[0]->GetX(),  (-ground[0]->GetY()) - 20.0f  + playerY , 100.0f );
 		numBullets++;

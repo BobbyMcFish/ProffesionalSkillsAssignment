@@ -5,7 +5,6 @@
 void frontEndSetUp()
 {	
 	soundLoader(volume);
-	//CXBOXController* Player1 = new CXBOXController(1); 
 	alSourcePlay( Menu );
 	frontEndFont = myEngine->LoadFont("Poplar Std", 85);
 	textBackColour = myEngine->CreateSprite("BackTextColour.png",145,100,0);
@@ -27,12 +26,13 @@ void frontEndUpdate()
 	{
 		textBackColour->SetY(100);
 	}
+	//control for starting the game from title screen
 	if((myEngine->KeyHit(enterKey) || (Player1->IsConnected())
 	&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_A) && textBackColour->GetY() == 100)
 	{
 		isBegining = !isBegining;
 	}
-
+	//control for stopping game at title screen
 	if((myEngine->KeyHit(quitKey) || (Player1->IsConnected())
 	&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_B) && textBackColour->GetY() == 200)
 	{
@@ -63,6 +63,8 @@ void gameSetUp()
 	sphereMesh = myEngine->LoadMesh("Sphere.x");
 	floorMesh = myEngine->LoadMesh("Block.x");
 	bulletMesh = myEngine->LoadMesh("Bullet.x");
+
+	// creates ground models and attaches them to their parents
 	ground[0] = floorMesh->CreateModel(1500.0f, baseHeight, 100.0f);
 	float x = 1000.0f;
 	for(int i = 1;  i <= 5; i++)
@@ -74,6 +76,7 @@ void gameSetUp()
 	ground[6] = floorMesh->CreateModel(-1545.0f, -117.0f, 0.0f);
 	ground[6]->AttachToParent(ground[0]);
 	ground[6]->RotateZ(-90);
+
 	camera = myEngine->CreateCamera(kManual,0.0f,50.0f,-60.0f);
 	numBullets = 0;
 
@@ -99,8 +102,7 @@ void gameUpdate()
 	outText.str("");
 	map[0]->setMinMax();
 	float floorY = ground[0]->GetY();
-
-<<<<<<< HEAD
+	//control to decrease the volume during gameplay
 	if(myEngine->KeyHit(Key_Period) || Player1->IsConnected() && Player1->GetState().Gamepad.bRightTrigger & XINPUT_GAMEPAD_RIGHT_SHOULDER)
 	{
 		if( volume > minVolume)
@@ -109,6 +111,7 @@ void gameUpdate()
 		alListenerf ( AL_GAIN,        volume ); 
 		}
 	}
+	//control to increase the volume during gameplay
 	else if(myEngine->KeyHit(Key_Comma)|| Player1->IsConnected() && Player1->GetState().Gamepad.bRightTrigger & XINPUT_GAMEPAD_LEFT_SHOULDER)
 	{
 		if( volume < maxVolume)
@@ -118,14 +121,13 @@ void gameUpdate()
 		}
 	}
 
-=======
->>>>>>> bf84e22ccb2c696baf079b2b05152a814ca053b3
 	enemies[0]->Creation(ground[0], updateTime);
 
 	enemies[0]->Moving(updateTime);
 
 	enemies[1]->Creation(ground[0], updateTime);
 	enemies[1]->Moving(updateTime);
+
 	//used to check for collision
 	const int SIZE = map.size();
 	bool collision = false;
@@ -149,7 +151,7 @@ void gameUpdate()
 		player->leftLeg();
 	}
 	if((myEngine->KeyHeld(rightKey) ||  (Player1->IsConnected())
-	&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)) //&& ground[0]->GetX() < 1510)
+	&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT))
 	{
 		ground[0]->MoveX(-speed * updateTime);
 		player->rightLeg();
@@ -181,11 +183,13 @@ void gameUpdate()
 			gravity = 2.5f;
 		}
 	}
+	//code to allow the player to move down from platforms
 	if((myEngine->KeyHeld(downKey) ||  (Player1->IsConnected()) 
 	&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) && collision)
 	{
 		ground[0]->MoveY(speed * updateTime + 5.0f);
 	}
+	// code to change pause bool allows for game pasuing
 	if(myEngine->KeyHit(pauseKey) || (Player1->IsConnected()) && Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START)
 	{
 		isPaused = !isPaused;
@@ -197,7 +201,7 @@ void gameUpdate()
 void gameRemovel()
 {
 	alutExit();
-	for(int i = 0; i < 3; i++)
+	for(int i = 0; i < 7; i++)
 	{
 		floorMesh->RemoveModel(ground[i]);
 	}
@@ -251,7 +255,6 @@ void main()
 		}
 		else 
 		{
-
 			if(myEngine->KeyHit(quitKey) || (Player1->IsConnected()) && Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_Y)
 			{
 				isQuiting = !isQuiting;	

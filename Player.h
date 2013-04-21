@@ -8,14 +8,14 @@ extern I3DEngine* myEngine;
 class Player
 {
 private:
-	int health;
-	int lives;
-	IMesh* playerMesh;
-	IModel* model;
-	int legLimit;
-	int lCounter;
-	int rCounter;
-	bool nextLeg;
+	int health; // players health
+	int lives; // players lives
+	IMesh* playerMesh; // players mesh
+	IModel* model; // players model
+	int legLimit; // the legs rotation limit
+	int lCounter; // left leg counter
+	int rCounter; // right leg counter
+	bool nextLeg; // allows switching between moving leg forward and back
 public:
 	Player();
 	~Player();
