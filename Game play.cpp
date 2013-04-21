@@ -58,6 +58,7 @@ void gameSetUp()
 	alSourcePlay( sourceBack );
 	player = new Player();
 	enemies.push_back(new DRunningEnemy(ground[0], player->GetModel()));
+	enemies.push_back(new DShooterEnemy(ground[0], player->GetModel()));
 	/*Model Setup*/
 	sphereMesh = myEngine->LoadMesh("Sphere.x");
 	floorMesh = myEngine->LoadMesh("Block.x");
@@ -99,6 +100,7 @@ void gameUpdate()
 	map[0]->setMinMax();
 	float floorY = ground[0]->GetY();
 
+//<<<<<<< HEAD
 	if(myEngine->KeyHit(Key_Period) || Player1->IsConnected() && Player1->GetState().Gamepad.bRightTrigger & XINPUT_GAMEPAD_RIGHT_SHOULDER)
 	{
 		if( volume > minVolume)
@@ -116,10 +118,14 @@ void gameUpdate()
 		}
 	}
 
+//=======
+//>>>>>>> bf84e22ccb2c696baf079b2b05152a814ca053b3
 	enemies[0]->Creation(ground[0], updateTime);
 
 	enemies[0]->Moving(updateTime);
 
+	enemies[1]->Creation(ground[0], updateTime);
+	enemies[1]->Moving(updateTime);
 	//used to check for collision
 	const int SIZE = map.size();
 	bool collision = false;
@@ -132,6 +138,8 @@ void gameUpdate()
 			break;
 		}
 	}
+
+	bool enemyHit = enemies[0]->ReturnBulletCollision();
 
 	//Movement Controls
 	if((myEngine->KeyHeld(leftKey) ||  (Player1->IsConnected()) 
@@ -183,7 +191,7 @@ void gameUpdate()
 		isPaused = !isPaused;
 	}
 
-	bulletMovement(bulletSpeed, maxBullets, playerY, playerX);
+	bulletMovement(bulletSpeed, maxBullets, playerY, playerX, enemyHit);
 }
 
 void gameRemovel()

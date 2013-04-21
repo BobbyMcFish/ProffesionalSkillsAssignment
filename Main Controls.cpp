@@ -104,7 +104,7 @@ void soundLoader(float volume)
 	alListenerf ( AL_GAIN,        volume );  // "Master" gain / volume. Controls overall loudness of all sounds
 }
 
-void bulletMovement(float bulletSpeed, int maxBullets, float playerY, float playerX)
+void bulletMovement(float bulletSpeed, int maxBullets, float playerY, float playerX, bool hit)
 {
 	if (myEngine->KeyHit( fireKey ) || Player1->IsConnected() && Player1->GetState().Gamepad.bRightTrigger & XINPUT_GAMEPAD_RIGHT_THUMB && numBullets < maxBullets)
 	{
@@ -113,7 +113,8 @@ void bulletMovement(float bulletSpeed, int maxBullets, float playerY, float play
 		tmp->xVel = 0.0f;
 		tmp->yVel = 0.0f;
 		tmp->model = bulletMesh->CreateModel( 0.0f, 0.0f, 0.0f );
-		tmp->life = 1.5f;
+		tmp->life = 2.0f;
+		tmp->model->Scale(1.0f);
         bullets.push_back( tmp );
 
 		
@@ -129,7 +130,7 @@ void bulletMovement(float bulletSpeed, int maxBullets, float playerY, float play
 		// Decrease life and see if bullet is dead
 		bullets[i]->life -= updateTime;
 
-		if (bullets[i]->life <= 0)
+		if (bullets[i]->life <= 0 || hit == true)
 		{
 			// Destroy bullet
   			bulletMesh->RemoveModel(bullets[i]->model);

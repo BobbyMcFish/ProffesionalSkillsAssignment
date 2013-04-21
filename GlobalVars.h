@@ -13,7 +13,7 @@
 #include "Player.h"
 #include "Map.h"
 #include "XboxController.h"
-#include "Runner.h"
+#include "Shooter.h"
 using namespace tle;
 
 #include <al.h>      // Main OpenAL functions

@@ -12,7 +12,7 @@ CEnemy::CEnemy(char enemyType)
 	}
 	if(enemyType == 'b')
 	{
-		enemy = myEngine->LoadMesh("HawkStarfighter.x");
+		enemy = myEngine->LoadMesh("Sphere.x");
 		enemyModel = enemy->CreateModel();
 	}
 }
@@ -38,6 +38,15 @@ void CEnemy::Creation(IModel* Ground, float updateTime)
 void CEnemy::Moving(float updateTime)
 {
 
+}
+
+bool CEnemy::ReturnBulletCollision()
+{
+	return false;
+}
+bool CEnemy::ReturnPlayerCollision()
+{
+	return false;
 };
 
 /*void EnemyBulletMovement()

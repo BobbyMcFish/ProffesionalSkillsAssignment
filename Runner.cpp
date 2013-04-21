@@ -98,7 +98,7 @@ bool DRunningEnemy::BulletCollisionDetection(int i)
 	for(int j = 0; j < numBullets; j++)
 	{
 		bulletX[j] = bullets.at(j)->model->GetX();
-		if(bulletX[j] > (minX[i]) && bulletX[j] < (maxX[i]))
+		if(bulletX[j] > (minX[i]+50))
 		{
 			return true;
 		}
@@ -109,4 +109,9 @@ bool DRunningEnemy::BulletCollisionDetection(int i)
 bool DRunningEnemy::ReturnPlayerCollision()
 {
 	return playerCollision;
+}
+
+bool DRunningEnemy::ReturnBulletCollision()
+{
+	return bulletCollision;
 };

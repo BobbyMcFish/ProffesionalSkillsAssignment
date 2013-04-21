@@ -28,4 +28,5 @@ public:
 	bool PlayerCollisionDetection(int i);
 	bool BulletCollisionDetection(int i);
 	bool ReturnPlayerCollision();
+	bool ReturnBulletCollision();
 };
