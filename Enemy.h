@@ -17,4 +17,6 @@ public:
 	IModel* ReturnModel();
 	virtual void Creation(IModel* Ground, float updateTime);
 	virtual void Moving(float updateTime);
+	virtual bool ReturnPlayerCollision();
+	virtual bool ReturnBulletCollision();
 };
