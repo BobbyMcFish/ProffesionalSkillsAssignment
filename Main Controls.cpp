@@ -5,6 +5,7 @@
 #include <deque>
 #include "XboxController.h"
 using namespace tle;
+
 #ifndef _EXTERNS
 #define _EXTERNS
 extern enum EKeyCode fireKey;
@@ -54,7 +55,7 @@ extern ALfloat listenerVel[3];
 extern ALfloat listenerOri[6];
 #endif
 
-void soundLoader()
+void soundLoader(float volume)
 {
 	// Initialise ALUT and hence OpenAL. If not using ALUT, we can initialise using core OpenAL functions.
 	// However then we would need to consider what sound devices are available, with what features, and
@@ -100,7 +101,7 @@ void soundLoader()
 	alListenerfv( AL_POSITION,    listenerPos ); // Position, velocity and orientation of listener affect sound...
 	alListenerfv( AL_VELOCITY,    listenerVel ); // ...reproduction as noted above
 	alListenerfv( AL_ORIENTATION, listenerOri ); 
-	alListenerf ( AL_GAIN,        0.0f );  // "Master" gain / volume. Controls overall loudness of all sounds
+	alListenerf ( AL_GAIN,        volume );  // "Master" gain / volume. Controls overall loudness of all sounds
 }
 
 void bulletMovement(float bulletSpeed, int maxBullets, float playerY, float playerX)

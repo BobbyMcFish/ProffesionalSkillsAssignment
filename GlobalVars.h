@@ -50,7 +50,9 @@ ALfloat listenerVel[3] = { 0.0, 0.0, 0.0 };
 // left-handed system  we have used, we must negate all Z values (facing direction has -ve Z below)
 ALfloat listenerOri[6] = { 0.0, 0.0, -1.0,
                            0.0, 1.0, 0.0 };
-
+float volume = 0.1f;
+const float maxVolume = 2.0f;
+const float minVolume = 0.0f;
 //Constant Variables
 const float baseHeight = -15.0f;// Height the main floor is at
 const float speed = 50.0f; // speed of player and jumping
@@ -81,6 +83,8 @@ IModel* enemy = NULL;
 //Text Variables
 int fontY = 20;
 int fontX = 20;
+int livesfontY = 40;
+int livesfontX = 40;
 IFont* FPSDisplay = NULL;
 stringstream outText;
 ISprite* backdrop = NULL;
@@ -94,15 +98,19 @@ enum EKeyCode leftKey = Key_A;
 enum EKeyCode rightKey = Key_D;
 enum EKeyCode downKey = Key_S;
 enum EKeyCode fireKey = Key_Space;
-enum EKeyCode upArrowKey = Key_Up;
-enum EKeyCode downArrowKey = Key_Down;
 enum EKeyCode enterKey = Key_Return;
+enum EKeyCode pauseKey = Key_P;
 float gravity = 2.5f;
 float updateTime = 0.0f; // calculating the updatetime every frame
 const float playerY = 5.0f;
 const float playerX = 0.0f;
 
+int playerHealth;
+int playerLives;
 
+bool isPaused = false;
+bool isQuiting = false;
+bool isBegining = false;
 /************Structures/Classes****************/
 
 /*Structures*/

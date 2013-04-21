@@ -4,7 +4,8 @@
 
 void frontEndSetUp()
 {	
-	soundLoader();
+	soundLoader(volume);
+	//CXBOXController* Player1 = new CXBOXController(1); 
 	alSourcePlay( Menu );
 	frontEndFont = myEngine->LoadFont("Poplar Std", 85);
 	textBackColour = myEngine->CreateSprite("BackTextColour.png",145,100,0);
@@ -16,13 +17,26 @@ void frontEndUpdate()
 	frontEndFont->Draw("Start Game",155,100);
 	frontEndFont->Draw("Quit",155,200);
 
-	if(myEngine->KeyHit(downArrowKey))
+	if(myEngine->KeyHit(downKey) || (Player1->IsConnected())
+	&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)
 	{
 		textBackColour->SetY(200);
 	}
-	else if(myEngine->KeyHit(upArrowKey))
+	else if(myEngine->KeyHit(jumpKey) || (Player1->IsConnected())
+	&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP)
 	{
 		textBackColour->SetY(100);
+	}
+	if((myEngine->KeyHit(enterKey) || (Player1->IsConnected())
+	&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_A) && textBackColour->GetY() == 100)
+	{
+		isBegining = !isBegining;
+	}
+
+	if((myEngine->KeyHit(quitKey) || (Player1->IsConnected())
+	&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_B) && textBackColour->GetY() == 200)
+	{
+		isQuiting = !isQuiting;
 	}
 }
 
@@ -32,6 +46,11 @@ void frontEndRemovel()
 	myEngine->RemoveFont(frontEndFont);
 	myEngine->RemoveSprite(backdrop);
 	alSourceStop( Menu );
+}
+
+void gameShutDown()
+{
+	myEngine->Stop();
 }
 	
 void gameSetUp()
@@ -54,7 +73,7 @@ void gameSetUp()
 	ground[6] = floorMesh->CreateModel(-1545.0f, -117.0f, 0.0f);
 	ground[6]->AttachToParent(ground[0]);
 	ground[6]->RotateZ(-90);
-	camera = myEngine->CreateCamera(kFPS,0.0f,50.0f,-60.0f);
+	camera = myEngine->CreateCamera(kManual,0.0f,50.0f,-60.0f);
 	numBullets = 0;
 
 	/*Map Setup*/
@@ -62,19 +81,40 @@ void gameSetUp()
 	temp->MapLoading(ground[0]);
 
 	/*UI Setup*/
-	FPSDisplay = myEngine->LoadFont( "Comic Sans MS", 36 );
+	FPSDisplay = myEngine->LoadFont( "Comic Sans MS", 36);
 	backdrop = myEngine->CreateSprite( "SARF_Jungle_Background_by_MrCanavan.jpg", 0, 0, 1);
 }
 
 void gameUpdate()
 {
+	player->GetHealth(playerHealth);
+	player->GetLives(playerLives);
 	updateTime = myEngine->Timer();
-	outText << "FPS: " << 0.25f / updateTime  ;
-	FPSDisplay ->Draw( outText.str(), fontX, fontY );
+	outText << "Health: " << playerHealth;
+	FPSDisplay ->Draw( outText.str(), fontX, fontY, kWhite );
+	outText.str("");
+	outText << "Lives: " << playerLives ;
+	FPSDisplay ->Draw( outText.str(), livesfontX, livesfontY, kWhite );
 	outText.str("");
 	map[0]->setMinMax();
 	float floorY = ground[0]->GetY();
 
+	if(myEngine->KeyHit(Key_Period) || Player1->IsConnected() && Player1->GetState().Gamepad.bRightTrigger & XINPUT_GAMEPAD_RIGHT_SHOULDER)
+	{
+		if( volume > minVolume)
+		{
+		volume -= 0.1; 
+		alListenerf ( AL_GAIN,        volume ); 
+		}
+	}
+	else if(myEngine->KeyHit(Key_Comma)|| Player1->IsConnected() && Player1->GetState().Gamepad.bRightTrigger & XINPUT_GAMEPAD_LEFT_SHOULDER)
+	{
+		if( volume < maxVolume)
+		{
+			volume += 0.1;
+			alListenerf ( AL_GAIN,        volume );
+		}
+	}
 
 	enemies[0]->Creation(ground[0], updateTime);
 
@@ -95,13 +135,13 @@ void gameUpdate()
 
 	//Movement Controls
 	if((myEngine->KeyHeld(leftKey) ||  (Player1->IsConnected()) 
-		&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) && ground[0]->GetX() < 1525)
+	&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) && ground[0]->GetX() < 1525)
 	{
 		ground[0]->MoveX(speed * updateTime);
 		player->leftLeg();
 	}
 	if((myEngine->KeyHeld(rightKey) ||  (Player1->IsConnected())
-		&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)) //&& ground[0]->GetX() < 1510)
+	&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)) //&& ground[0]->GetX() < 1510)
 	{
 		ground[0]->MoveX(-speed * updateTime);
 		player->rightLeg();
@@ -109,7 +149,7 @@ void gameUpdate()
 
 	//Code to make the player look like they are jumping but the platforms moves down
 	if((myEngine->KeyHeld(jumpKey) || (Player1->IsConnected()) 
-		&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_A ))
+	&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_A ))
 	{
 		//code to apply gravity and move the ground and platforms attached to it
 		ground[0]->MoveY(-speed * gravity * updateTime);
@@ -132,6 +172,15 @@ void gameUpdate()
 		{
 			gravity = 2.5f;
 		}
+	}
+	if((myEngine->KeyHeld(downKey) ||  (Player1->IsConnected()) 
+	&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) && collision)
+	{
+		ground[0]->MoveY(speed * updateTime + 5.0f);
+	}
+	if(myEngine->KeyHit(pauseKey) || (Player1->IsConnected()) && Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START)
+	{
+		isPaused = !isPaused;
 	}
 
 	bulletMovement(bulletSpeed, maxBullets, playerY, playerX);
@@ -164,31 +213,53 @@ void main()
 	{
 		// Draw the scene
 		myEngine->DrawScene();
+
 		frontEndUpdate();
 
-		if(myEngine->KeyHit(quitKey) ||  (Player1->IsConnected()) && Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_Y)
+		if(isBegining)
 		{
 			break;
+		}
+		if(isQuiting)
+		{
+			gameShutDown();
 		}
 	}
 
 	frontEndRemovel();
 
-	gameSetUp();
+	if(myEngine->IsRunning())
+	{
+		gameSetUp();
+	}
+	
 	while (myEngine->IsRunning())
 	{
 		// Draw the scene
 		myEngine->DrawScene();
-		
-		gameUpdate();
-
-		if(myEngine->KeyHit(quitKey)||  (Player1->IsConnected()) && Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_Y)
+		if(!isPaused)
 		{
+			gameUpdate();
+		}
+		else 
+		{
+
+			if(myEngine->KeyHit(quitKey) || (Player1->IsConnected()) && Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_Y)
+			{
+				isQuiting = !isQuiting;	
+			}
+			if(myEngine->KeyHit(pauseKey) || (Player1->IsConnected()) && Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_START)
+			{
+				isPaused = !isPaused;
+			}
+			FPSDisplay->Draw("Paused", 200, 200, kWhite);
+		}
+		if(isQuiting)
+		{
+			gameRemovel();
 			break;
 		}
 	}
-
-	gameRemovel();
 	// Delete the 3D engine now we are finished with it
 	myEngine->Delete();
 }
