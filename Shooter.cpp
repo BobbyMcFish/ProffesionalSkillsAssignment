@@ -9,6 +9,7 @@ DShooterEnemy::DShooterEnemy(IModel* ground, IModel* player) : CEnemy('b')
 	spawnDistance = 10;
 	numOfBullets = 0;
 	bulletMesh = myEngine->LoadMesh("Bullet.x");
+	bulletBool = false;
 }
 
 void DShooterEnemy::Creation(IModel* ground, float updateTime)
@@ -18,11 +19,15 @@ void DShooterEnemy::Creation(IModel* ground, float updateTime)
 	shooter->SetLocalPosition((-1000.0f), 20.0f, 0.0f);
 	shooter->LookAt(playerModel);
 	shooter->Scale(1.0f);
-	bullet = bulletMesh->CreateModel((shooter->GetX()), shooter->GetY(), shooter->GetZ());
-	bullet->AttachToParent(shooter);
-	bullet->SetPosition((shooter->GetX()), shooter->GetY(), shooter->GetZ());
-	bullet->Scale(1.0f);
-	bullet->SetSkin("venus.jpg");
+	if (bulletBool == false)
+	{
+		bulletBool = true;
+		bullet = bulletMesh->CreateModel((shooter->GetX()), shooter->GetY(), shooter->GetZ());
+		bullet->AttachToParent(shooter);
+		bullet->SetPosition((shooter->GetX()), shooter->GetY(), shooter->GetZ());
+		bullet->Scale(1.0f);
+		bullet->SetSkin("venus.jpg");
+	}
 	
 }
 
@@ -30,13 +35,14 @@ void DShooterEnemy::Moving(float updateTime)
 {
 	bullet->MoveZ(10.0f * updateTime);
 	bool playerHit = PlayerCollisionDetection(0);
-	if(playerHit != false);
+	if(playerHit == true)
 	{
-		shooter->SetX(playerModel->GetX()+500);	
+		shooter->SetX(playerModel->GetX()+500);
+		bulletMesh->RemoveModel(bullet);
 	}
 	if(bullet->GetX() < playerModel->GetX())
 	{
-		bullet->SetPosition((shooter->GetX()), shooter->GetY(), shooter->GetZ());
+		//bullet->SetPosition((shooter->GetX()), shooter->GetY(), shooter->GetZ());
 	}
 }
 

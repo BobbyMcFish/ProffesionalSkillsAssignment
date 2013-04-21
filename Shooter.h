@@ -18,6 +18,7 @@ private:
 	float minY;
 	float maxY;
 	int numOfBullets;
+	bool bulletBool;
 public:
 	DShooterEnemy(IModel* ground, IModel* player);
 	void Creation(IModel* ground, float updateTime);
