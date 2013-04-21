@@ -10,13 +10,13 @@ private:
 	IModel* shooter;
 	IMesh* bulletMesh;
 	vector <IModel*> shooters;
-	deque <IModel*> bullets;
+	IModel* bullet;
 	float bulletSpeed;
 	int spawnDistance;
-	float minX[3];
-	float maxX[3];
-	float minY[3];
-	float maxY[3];
+	float minX;
+	float maxX;
+	float minY;
+	float maxY;
 	int numOfBullets;
 public:
 	DShooterEnemy(IModel* ground, IModel* player);

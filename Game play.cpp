@@ -99,8 +99,6 @@ void gameUpdate()
 	outText.str("");
 	map[0]->setMinMax();
 	float floorY = ground[0]->GetY();
-
-//<<<<<<< HEAD
 	if(myEngine->KeyHit(Key_Period) || Player1->IsConnected() && Player1->GetState().Gamepad.bRightTrigger & XINPUT_GAMEPAD_RIGHT_SHOULDER)
 	{
 		if( volume > minVolume)
@@ -117,9 +115,6 @@ void gameUpdate()
 			alListenerf ( AL_GAIN,        volume );
 		}
 	}
-
-//=======
-//>>>>>>> bf84e22ccb2c696baf079b2b05152a814ca053b3
 	enemies[0]->Creation(ground[0], updateTime);
 
 	enemies[0]->Moving(updateTime);
