@@ -84,7 +84,7 @@ void gameSetUp()
 	backdrop = myEngine->CreateSprite( "SARF_Jungle_Background_by_MrCanavan.jpg", 0, 0, 1);
 
 	/*Enemy Setup*/
-	runners = new DRunningEnemy(ground[0], player->GetModel(),100.0f);
+	runners = new DRunningEnemy(ground[0], player->GetModel(),150.0f);
 	shooters = new DShooterEnemy(ground[0], player->GetModel());
 	
 	
@@ -98,7 +98,7 @@ void gameUpdate()
 	outText << "Health: " << playerHealth;
 	FPSDisplay ->Draw( outText.str(), fontX, fontY, kWhite );
 	outText.str("");
-	outText << "Lives: " << playerLives ;
+	outText << "Lives remaining: " << playerLives ;
 	FPSDisplay ->Draw( outText.str(), livesfontX, livesfontY, kWhite );
 	outText.str("");
 	map[0]->setMinMax();
@@ -137,8 +137,31 @@ void gameUpdate()
 		}
 	}
 
-	//bool enemyHit = runners->ReturnBulletCollision();
-
+	bool runnerHit = runners->ReturnPlayerCollision();
+	bool shooterHit = shooters->ReturnBulletCollision();
+	
+	if(runnerHit == true)
+	{
+		player->SetHealth(50);
+	}
+	if(shooterHit == true)
+	{
+		player->SetHealth(10);
+	}
+	if(playerHealth == 0)
+	{
+		player->SetLives(1);
+		if(playerLives > 0)
+		{
+			ground[0]->SetX(1500.0f);
+			ground[0]->SetY(baseHeight);
+			player->SetHealth(-100);
+		}
+		else if(playerLives == 0)
+		{
+			gameOver = true;
+		}
+	}
 	//Movement Controls
 	if((myEngine->KeyHeld(leftKey) ||  (Player1->IsConnected()) 
 	&& Player1->GetState().Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) && ground[0]->GetX() < 1525)
@@ -260,6 +283,11 @@ void main()
 			}
 			FPSDisplay->Draw("Paused", 200, 200, kWhite);
 		}
+		if(gameOver == true)
+		{
+			gameRemovel();
+			break;
+		}
 		if(isQuiting)
 		{
 			gameRemovel();
@@ -268,4 +296,10 @@ void main()
 	}
 	// Delete the 3D engine now we are finished with it
 	myEngine->Delete();
+	if(gameOver == true)
+	{
+		cout << "I am sorry you are out of lives, game over." << endl;
+		cout << "Please insert 50p to try again!" << endl;
+		system ("pause");
+	}
 }

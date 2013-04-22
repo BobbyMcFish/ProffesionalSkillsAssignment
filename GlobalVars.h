@@ -85,6 +85,7 @@ int fontY = 20;
 int fontX = 20;
 int livesfontY = 40;
 int livesfontX = 40;
+bool gameOver = false;
 IFont* FPSDisplay = NULL;
 stringstream outText;
 ISprite* backdrop = NULL;

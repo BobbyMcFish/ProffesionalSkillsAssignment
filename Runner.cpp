@@ -22,6 +22,7 @@ DRunningEnemy::DRunningEnemy(IModel* ground, IModel* player, float sentSpeed) : 
 	minY = 0;
 	maxX = 0;
 	maxY = 0;
+	runY = 0;
 	numOfEnemies = 0;
 }
 
@@ -42,10 +43,8 @@ void DRunningEnemy::Creation(IModel* ground, float updateTime)
 
 void DRunningEnemy::Moving(float updateTime)
 {
-	playerX = playerModel->GetX();
-	playerY = playerModel->GetY();
+	float playerX = playerModel->GetX();
 	runner->MoveX(-speed * updateTime);
-
 	minMax();
 	playerCollision = PlayerCollisionDetection();
 	for(int j = 0; j < bullets.size(); j++)
@@ -55,12 +54,20 @@ void DRunningEnemy::Moving(float updateTime)
 	if(runner->GetX() < playerX-200)
 	{
 		float runnerX = runner->GetX();
-		runnerX = playerModel->GetX()+400;
-		runner->SetX(playerModel->GetX()+400);
+		runnerX = playerModel->GetX()+300;
+		runner->SetX(playerModel->GetX()+300);
+		runner->SetY(0.0f + runY);
+		runY += 25;
 	}
 	else if(playerCollision == true || bulletCollision == true )
 	{
-		runner->SetX(playerX+400);
+		runner->SetX(playerX+300);
+		runner->SetY(0.0f + runY);
+		runY += 10;
+	}
+	if(runY > 50)
+	{
+		runY = 0.0f;
 	}
 	
 }
@@ -71,14 +78,18 @@ void DRunningEnemy::minMax()
 	maxX = runner->GetX() + 10.0f;
 	minY = runner->GetY() - 10.0f;
 	maxY = runner->GetY() + 10.0f;
+	playerMinX = playerModel->GetX() - 5.0f;
+	playerMaxX = playerModel->GetX() + 5.0f;
+	playerMinY = playerModel->GetY() - 10.0f;
+	playerMaxY = playerModel->GetY() + 10.0f;
 }
 
 bool DRunningEnemy::PlayerCollisionDetection()
 {
 	float radius = 13.0f;
-	if(playerX > minX && playerX < maxX && playerY > minY && playerY < maxY)
+	if(playerMaxX > minX && playerMinX < maxX && playerMaxY > minY && playerMinY < maxY)
 	{
-		if(maxY - playerY  > playerY)
+		if(maxY - playerMaxY  > playerMinY)
 		{
 			return true;
 		}

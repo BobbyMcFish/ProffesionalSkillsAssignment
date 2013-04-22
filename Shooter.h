@@ -23,7 +23,6 @@ private:
 	float pMaxY;
 	float pMinY;
 	float shootY;
-	float shootZ;
 	int numOfBullets;
 	bool bulletBool;
 public:
@@ -31,6 +30,7 @@ public:
 	void Creation(IModel* ground, float updateTime);
 	void Moving(float updateTime);
 	void minMax();
+	bool playerHit();
 	bool PlayerCollisionDetection();
 	bool BulletCollisionDetection(IModel* bullet);
 };

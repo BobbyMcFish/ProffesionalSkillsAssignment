@@ -53,7 +53,7 @@ void DShooterEnemy::Moving(float updateTime)
 		shooter->LookAt(playerModel);
 		bullet->SetPosition(shooterX, shooterY, shooterZ);
 		bullet->Scale(1.0f);
-		bulletLife = 3.0f;
+		bulletLife = 1.f;
 		bullet->SetSkin("venus.jpg");
 	}
 	 
@@ -61,10 +61,13 @@ void DShooterEnemy::Moving(float updateTime)
 	bulletLife -= updateTime;
 	minMax();
 	bool playerHit = PlayerCollisionDetection();
-	if(playerModel->GetX()-50 > shooter->GetX())
+	for(int i = 0; i < bullets.size(); i++)
+	{
+		bool bulletHit = BulletCollisionDetection(bullets.at(i)->model);
+	}
+	if(playerModel->GetX()-50 > shooter->GetX() || playerHit == true)
 	{
 		shootY += 25;
-		shootZ -= 30;
 		shooter->SetX(playerModel->GetX()+100);
 		shooter->SetY( 0.0f + shootY);
 	}
@@ -89,10 +92,22 @@ void DShooterEnemy::minMax()
 	MinY = shooter->GetY() - 10.0f;
 	MaxY = shooter->GetY() + 10.0f;
 
-	pMinX = playerModel->GetX() - 10.0f;
-	pMaxX = playerModel->GetX() + 10.0f;
+	pMinX = playerModel->GetX() - 5.0f;
+	pMaxX = playerModel->GetX() + 5.0f;
 	pMinY = playerModel->GetY() - 10.0f;
 	pMaxY = playerModel->GetY() + 10.0f;
+}
+
+bool DShooterEnemy::playerHit()
+{
+	float bulletX;
+	float bulletY;
+	bulletX = bullet->GetX()
+	bulletY = bullet->GetY() + 15;
+	if(bulletX > pMinX && bulletY > pMinY && bulletY < pMaxY)
+	{
+		return true;
+	}
 }
 
 bool DShooterEnemy::PlayerCollisionDetection()
@@ -115,5 +130,14 @@ bool DShooterEnemy::PlayerCollisionDetection()
 
 bool DShooterEnemy::BulletCollisionDetection(IModel* bullet)
 {
+	float bulletX;
+	float bulletY;
+	bulletX = bullet->GetX();
+	bulletY = bullet->GetY() + 15;
+	if(bulletX > MinX && bulletY > MinY && bulletY < MaxY)
+	{
+		return true;
+	}
+	
 	return false;
 }

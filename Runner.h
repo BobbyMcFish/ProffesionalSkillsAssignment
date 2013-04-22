@@ -6,8 +6,10 @@ class DRunningEnemy : public CEnemy
 private:
 	float scale;
 	float speed;
-	float playerX;
-	float playerY;
+	float playerMinX;
+	float playerMinY;
+	float playerMaxX;
+	float playerMaxY;
 	IMesh* runnerMesh;
 	IModel* runner;
 	vector <IModel*> runners;
@@ -17,6 +19,7 @@ private:
 	float maxX;
 	float minY;
 	float maxY;
+	float runY;
 	float shooterY;
 	bool playerCollision;
 	bool bulletCollision;
