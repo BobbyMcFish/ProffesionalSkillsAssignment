@@ -29,6 +29,7 @@ void DShooterEnemy::Creation(IModel* ground, float updateTime)
 {
 	if(numOfBullets < 1)
 	{
+		shooter->SetSkin("plane.jpg");
 		shooter->AttachToParent(ground);
 		shooter->SetLocalPosition(-1000.0f, 25.0f, 0.0f);
 		shooter->LookAt(playerModel);

@@ -37,6 +37,7 @@ void DRunningEnemy::Creation(IModel* ground, float updateTime)
 		runner->SetLocalPosition((-1000.0f), 20.0f, 0.0f);
 		runner->LookAt(playerModel);
 		runner->Scale(scale);
+		runner->SetSkin("jack.jpg");
 		numOfEnemies++;
 	}
 }
