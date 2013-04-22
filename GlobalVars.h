@@ -125,7 +125,8 @@ struct BulletData
 Player* player = NULL;
 deque <BulletData*> bullets;
 vector <CMap*> map;
-vector <CEnemy*> enemies;
+CEnemy* runners;
+CEnemy* shooters;
 CXBOXController* Player1 = new CXBOXController(1); 
 
 #else

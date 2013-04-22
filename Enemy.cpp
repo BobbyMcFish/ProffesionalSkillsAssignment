@@ -4,12 +4,6 @@ extern IModel* player;
 
 CEnemy::CEnemy(char enemyType)
 {
-	enemy = NULL;
-	if(enemyType == 'a')
-	{
-		enemy = myEngine->LoadMesh("sopwith-camel.x");
-		enemyModel = enemy->CreateModel();
-	}
 	if(enemyType == 'b')
 	{
 		enemy = myEngine->LoadMesh("Sphere.x");

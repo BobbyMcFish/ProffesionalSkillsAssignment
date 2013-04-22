@@ -13,36 +13,30 @@ extern int numBullets;
 //extern const float playerY;
 
 
-DRunningEnemy::DRunningEnemy(IModel* ground, IModel* player) : CEnemy('a')
+DRunningEnemy::DRunningEnemy(IModel* ground, IModel* player, float sentSpeed) : CEnemy('a')
 {
 	playerModel = player;
-	scale = 5.0f;
-	runner = ReturnModel();
-	speed[0] = 5.0f;
-	speed[1] = 50.0f;
-	speed[2] = 100.0f;
+	scale = 3.0f;
+	speed = sentSpeed;
+	minX = 0;
+	minY = 0;
+	maxX = 0;
+	maxY = 0;
 	numOfEnemies = 0;
-	spawnDistance = 10;
-	playerX = 0;
-	playerY = 5;
 }
 
 
 void DRunningEnemy::Creation(IModel* ground, float updateTime)
 {
-	int maxNumber = 3;
-	const int maxSpawn = 3;
-	float x = 0.0f;
-	for(numOfEnemies; numOfEnemies < maxSpawn; numOfEnemies++)
+	if(numOfEnemies < 1)
 	{
+		runnerMesh = myEngine->LoadMesh("sopwith-camel.x");
+		runner = runnerMesh->CreateModel();
 		runner->AttachToParent(ground);
-		runner->SetLocalPosition((-1000.0f + x), 20.0f, 0.0f);
-		runner->RotateLocalY(-90.0f);
+		runner->SetLocalPosition((-1000.0f), 20.0f, 0.0f);
 		runner->LookAt(playerModel);
 		runner->Scale(scale);
-		runners.push_back(runner);
-		runner = ReturnModel();
-		x += 10.0f;
+		numOfEnemies++;
 	}
 }
 
@@ -50,37 +44,41 @@ void DRunningEnemy::Moving(float updateTime)
 {
 	playerX = playerModel->GetX();
 	playerY = playerModel->GetY();
-	for(int i = 0; i < numOfEnemies; i++)
+	runner->MoveX(-speed * updateTime);
+
+	minMax();
+	playerCollision = PlayerCollisionDetection();
+	for(int j = 0; j < bullets.size(); j++)
 	{
-		runners.at(i)->MoveX(-speed[i] * updateTime);
-		minMax(runners[i], i);
-		playerCollision = PlayerCollisionDetection(i);
-		bulletCollision = BulletCollisionDetection(i);
-		if(runners.at(i)->GetX() < playerX-200)
-		{
-			runners.at(i)->SetX(playerX+400);
-		}
-		else if(playerCollision == true || bulletCollision == true )
-		{
-			runners.at(i)->SetX(playerX+400);
-		}
+		bulletCollision = BulletCollisionDetection(bullets.at(j)->model);
 	}
+	if(runner->GetX() < playerX-200)
+	{
+		float runnerX = runner->GetX();
+		runnerX = playerModel->GetX()+400;
+		runner->SetX(playerModel->GetX()+400);
+	}
+	else if(playerCollision == true || bulletCollision == true )
+	{
+		runner->SetX(playerX+400);
+	}
+	
 }
 
-void DRunningEnemy::minMax(IModel* RunEnemy, int i)
+void DRunningEnemy::minMax()
 {
-	minX[i] = RunEnemy->GetX() - 10.0f;
-	maxX[i] = RunEnemy->GetX() + 10.0f;
-	minY[i] = RunEnemy->GetY() - 10.0f;
-	maxY[i] = RunEnemy->GetY() + 10.0f;
+	minX = runner->GetX() - 10.0f;
+	maxX = runner->GetX() + 10.0f;
+	minY = runner->GetY() - 10.0f;
+	maxY = runner->GetY() + 10.0f;
 }
 
-bool DRunningEnemy::PlayerCollisionDetection(int i)
+bool DRunningEnemy::PlayerCollisionDetection()
 {
 	float radius = 13.0f;
-	if(playerX > minX[i] && playerX < maxX[i] && playerY > minY[i] && playerY < maxY[i])
+	if(playerX > minX && playerX < maxX && playerY > minY && playerY < maxY)
 	{
-		if(maxY[i] - playerY  > playerY)
+		if(maxY - playerY  > playerY)
 		{
 			return true;
 		}
@@ -92,17 +90,17 @@ bool DRunningEnemy::PlayerCollisionDetection(int i)
 	return false;
 }
 
-bool DRunningEnemy::BulletCollisionDetection(int i)
+bool DRunningEnemy::BulletCollisionDetection(IModel* bullet)
 {
-	float bulletX[5];
-	for(int j = 0; j < numBullets; j++)
+	float bulletX;
+	float bulletY;
+	bulletX = bullet->GetX();
+	bulletY = bullet->GetY() + 15;
+	if(bulletX > minX && bulletY > minY && bulletY < maxY)
 	{
-		bulletX[j] = bullets.at(j)->model->GetX();
-		if(bulletX[j] > (minX[i]+50))
-		{
-			return true;
-		}
+		return true;
 	}
+	
 	return false;
 }
 

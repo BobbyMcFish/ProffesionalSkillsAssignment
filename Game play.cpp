@@ -57,8 +57,6 @@ void gameSetUp()
 {
 	alSourcePlay( sourceBack );
 	player = new Player();
-	enemies.push_back(new DRunningEnemy(ground[0], player->GetModel()));
-	enemies.push_back(new DShooterEnemy(ground[0], player->GetModel()));
 	/*Model Setup*/
 	sphereMesh = myEngine->LoadMesh("Sphere.x");
 	floorMesh = myEngine->LoadMesh("Block.x");
@@ -84,6 +82,12 @@ void gameSetUp()
 	/*UI Setup*/
 	FPSDisplay = myEngine->LoadFont( "Comic Sans MS", 36);
 	backdrop = myEngine->CreateSprite( "SARF_Jungle_Background_by_MrCanavan.jpg", 0, 0, 1);
+
+	/*Enemy Setup*/
+	runners = new DRunningEnemy(ground[0], player->GetModel(),100.0f);
+	shooters = new DShooterEnemy(ground[0], player->GetModel());
+	
+	
 }
 
 void gameUpdate()
@@ -115,12 +119,11 @@ void gameUpdate()
 			alListenerf ( AL_GAIN,        volume );
 		}
 	}
-	enemies[0]->Creation(ground[0], updateTime);
+	runners->Creation(ground[0], updateTime);
+	shooters->Creation(ground[0], updateTime);
 
-	enemies[0]->Moving(updateTime);
-
-	enemies[1]->Creation(ground[0], updateTime);
-	enemies[1]->Moving(updateTime);
+	runners->Moving(updateTime);
+	shooters->Moving(updateTime);
 	//used to check for collision
 	const int SIZE = map.size();
 	bool collision = false;
@@ -134,7 +137,7 @@ void gameUpdate()
 		}
 	}
 
-	bool enemyHit = enemies[0]->ReturnBulletCollision();
+	//bool enemyHit = runners->ReturnBulletCollision();
 
 	//Movement Controls
 	if((myEngine->KeyHeld(leftKey) ||  (Player1->IsConnected()) 
@@ -186,7 +189,7 @@ void gameUpdate()
 		isPaused = !isPaused;
 	}
 
-	bulletMovement(bulletSpeed, maxBullets, playerY, playerX, enemyHit);
+	bulletMovement(bulletSpeed, maxBullets, playerY, playerX, false);
 }
 
 void gameRemovel()

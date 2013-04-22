@@ -5,28 +5,29 @@ class DRunningEnemy : public CEnemy
 {
 private:
 	float scale;
-	float speed[3];
+	float speed;
 	float playerX;
 	float playerY;
-	int numOfEnemies;
+	IMesh* runnerMesh;
 	IModel* runner;
-	IModel* playerModel;
 	vector <IModel*> runners;
-	int spawnDistance;
-	float minX[3];
-	float maxX[3];
-	float minY[3];
-	float maxY[3];
+	int numOfEnemies;
+	IModel* playerModel;
+	float minX;
+	float maxX;
+	float minY;
+	float maxY;
+	float shooterY;
 	bool playerCollision;
 	bool bulletCollision;
 
 public:
-	DRunningEnemy(IModel* ground, IModel* player);
+	DRunningEnemy(IModel* ground, IModel* player, float sentSpeed);
 	void Creation(IModel* Ground, float updateTime);
 	void Moving(float updateTime);
-	void minMax(IModel* runEnemy, int i);
-	bool PlayerCollisionDetection(int i);
-	bool BulletCollisionDetection(int i);
+	void minMax();
+	bool PlayerCollisionDetection();
+	bool BulletCollisionDetection(IModel* bullet);
 	bool ReturnPlayerCollision();
 	bool ReturnBulletCollision();
 };
