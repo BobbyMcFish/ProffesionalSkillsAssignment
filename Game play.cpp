@@ -84,10 +84,8 @@ void gameSetUp()
 	backdrop = myEngine->CreateSprite( "SARF_Jungle_Background_by_MrCanavan.jpg", 0, 0, 1);
 
 	/*Enemy Setup*/
-	runners = new DRunningEnemy(ground[0], player->GetModel(),150.0f);
-	shooters = new DShooterEnemy(ground[0], player->GetModel());
-	
-	
+	runners = new DRunningEnemy(ground[0], player->GetModel(),100.0f);
+	shooters = new DShooterEnemy(ground[0], player->GetModel());	
 }
 
 void gameUpdate()
@@ -148,7 +146,7 @@ void gameUpdate()
 	{
 		player->SetHealth(10);
 	}
-	if(playerHealth == 0)
+	if(playerHealth <= 0)
 	{
 		player->SetLives(1);
 		if(playerLives > 0)
@@ -232,6 +230,7 @@ void main()
 {
 	// Create a 3D engine (using TLX engine here) and open a window for it
 	myEngine->StartWindowed();
+	bool win = false;
 
 	// Add default folder for meshes and other media
 	myEngine->AddMediaFolder( "Media" );
@@ -288,6 +287,10 @@ void main()
 			gameRemovel();
 			break;
 		}
+		if(player->GetModel()->GetX() > ground[1]->GetX())
+		{
+			win == true;
+		}
 		if(isQuiting)
 		{
 			gameRemovel();
@@ -300,6 +303,11 @@ void main()
 	{
 		cout << "I am sorry you are out of lives, game over." << endl;
 		cout << "Please insert 50p to try again!" << endl;
+		system ("pause");
+	}
+	if(win == true)
+	{
+		cout << "congratulations you won the game!";
 		system ("pause");
 	}
 }

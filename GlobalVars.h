@@ -55,7 +55,7 @@ const float maxVolume = 2.0f;
 const float minVolume = 0.0f;
 //Constant Variables
 const float baseHeight = -15.0f;// Height the main floor is at
-const float speed = 50.0f; // speed of player and jumping
+const float speed = 75.0f; // speed of player and jumping
 
 //Engine
 I3DEngine* myEngine = New3DEngine( kTLX );

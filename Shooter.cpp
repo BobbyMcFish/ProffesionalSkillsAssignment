@@ -18,7 +18,6 @@ DShooterEnemy::DShooterEnemy(IModel* ground, IModel* player) : CEnemy('b')
 	spawnDistance = 10;
 	numOfBullets = 0;
 	shootY = 0.0f;
-	shootZ = 0.0f;
 	bulletBool = false;
 	MinX = 0;
 	MinY = 0;
@@ -34,7 +33,7 @@ void DShooterEnemy::Creation(IModel* ground, float updateTime)
 		shooter->SetLocalPosition(-1000.0f, 25.0f, 0.0f);
 		shooter->LookAt(playerModel);
 		shooter->Scale(1.0f);
-		bulletSpeed = 200.0f;
+		bulletSpeed = 150.0f;
 		numOfBullets++;
 	}
 }
@@ -60,12 +59,14 @@ void DShooterEnemy::Moving(float updateTime)
 	bullet->MoveZ(bulletSpeed * updateTime);
 	bulletLife -= updateTime;
 	minMax();
-	bool playerHit = PlayerCollisionDetection();
+	bool bulletHit = false;
+	playerHit = PlayerHit();
+	bool playerCollision = PlayerCollisionDetection();
 	for(int i = 0; i < bullets.size(); i++)
 	{
-		bool bulletHit = BulletCollisionDetection(bullets.at(i)->model);
+		bulletHit = BulletCollisionDetection(bullets.at(i)->model);
 	}
-	if(playerModel->GetX()-50 > shooter->GetX() || playerHit == true)
+	if(playerModel->GetX()-50 > shooter->GetX() || playerCollision == true || bulletHit == true)
 	{
 		shootY += 25;
 		shooter->SetX(playerModel->GetX()+100);
@@ -98,16 +99,19 @@ void DShooterEnemy::minMax()
 	pMaxY = playerModel->GetY() + 10.0f;
 }
 
-bool DShooterEnemy::playerHit()
+bool DShooterEnemy::PlayerHit()
 {
 	float bulletX;
 	float bulletY;
-	bulletX = bullet->GetX()
-	bulletY = bullet->GetY() + 15;
-	if(bulletX > pMinX && bulletY > pMinY && bulletY < pMaxY)
+	bulletX = bullet->GetX();
+	bulletY = bullet->GetY();
+	if(bulletX > pMinX && bulletX < pMaxX && bulletY > pMinY && bulletY < pMaxY)
 	{
+		bulletBool = false;
+		bulletMesh->RemoveModel(bullet);
 		return true;
 	}
+	return false;
 }
 
 bool DShooterEnemy::PlayerCollisionDetection()
@@ -140,4 +144,9 @@ bool DShooterEnemy::BulletCollisionDetection(IModel* bullet)
 	}
 	
 	return false;
+}
+
+bool DShooterEnemy::ReturnBulletCollision()
+{
+	return playerHit;
 }

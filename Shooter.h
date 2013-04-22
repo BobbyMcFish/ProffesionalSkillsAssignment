@@ -25,12 +25,14 @@ private:
 	float shootY;
 	int numOfBullets;
 	bool bulletBool;
+	bool playerHit;
 public:
 	DShooterEnemy(IModel* ground, IModel* player);
 	void Creation(IModel* ground, float updateTime);
 	void Moving(float updateTime);
 	void minMax();
-	bool playerHit();
+	bool PlayerHit();
 	bool PlayerCollisionDetection();
 	bool BulletCollisionDetection(IModel* bullet);
+	bool ReturnBulletCollision();
 };
